@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <title>Simple Internet Speed Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    .results {
+      margin: 20px auto;
+      font-size: 1.5em;
+      max-width: 400px;
+    }
+
+    .results span {
+      font-weight: bold;
+      color: #00c6ff;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      background: #00c6ff;
+      color: black;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 30px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    button:hover:not(:disabled) {
+      background: #0072ff;
+      color: white;
+    }
+
+    button:disabled {
+      background: #005bbb;
+      color: #ccc;
+      cursor: not-allowed;
+    }
+
+    img {
+      width: 150px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🚀 Internet Speed Test</h1>
+<button id="startBtn">Start Test</button>
+
+<div class="results">
+  <p>Download: <span id="download">0</span> Mbps</p>
+  <p>Upload: <span id="upload">0</span> Mbps</p>
+  <p>Ping: <span id="ping">0</span> ms</p>
+</div>
+
+<img src="https://media.giphy.com/media/3o7abldj0b3rxrZUxW/giphy.gif" alt="fun gif" />
+
+<script>
+  const startBtn = document.getElementById('startBtn');
+  const downloadSpan = document.getElementById('download');
+  const uploadSpan = document.getElementById('upload');
+  const pingSpan = document.getElementById('ping');
+
+  // URLs to test (with CORS enabled)
+  const downloadUrl = 'https://file-examples-com.github.io/uploads/2017/10/file-example_PDF_5MB.pdf';
+  const uploadUrl = 'https://httpbin.org/post';  // May still fail CORS for POST
+  const pingUrl = 'https://cors-anywhere.herokuapp.com/https://www.google.com/favicon.ico'; // via CORS proxy
+
+  async function measurePing() {
+    const tries = 5;
+    let totalTime = 0;
+
+    for(let i = 0; i < tries; i++) {
+      const start = performance.now();
+      try {
+        await fetch(pingUrl, { cache: "no-cache" });
+      } catch(e) {
+        // Ignore errors
+      }
+      const end = performance.now();
+      totalTime += (end - start);
+    }
+    return totalTime / tries;
+  }
+
+  async function measureDownload() {
+    const start = performance.now();
+    const response = await fetch(downloadUrl, { cache: "no-cache" });
+    const blob = await response.blob();
+    const end = performance.now();
+
+    const duration = (end - start) / 1000; // seconds
+    const bitsLoaded = blob.size * 8;
+    const speedBps = bitsLoaded / duration;
+    const speedMbps = speedBps / (1024 * 1024);
+
+    return speedMbps;
+  }
+
+  async function measureUpload() {
+    // 1MB of data (reduce size to improve success rate)
+    const size = 1 * 1024 * 1024;
+    const data = new Uint8Array(size);
+    crypto.getRandomValues(data);
+
+    try {
+      const start = performance.now();
+      const response = await fetch(uploadUrl, {
+        method: 'POST',
+        body: data,
+        cache: 'no-cache'
+      });
+      await response.text();
+      const end = performance.now();
+
+      const duration = (end - start) / 1000; // seconds
+      const bitsUploaded = size * 8;
+      const speedBps = bitsUploaded / duration;
+      const speedMbps = speedBps / (1024 * 1024);
+
+      return speedMbps;
+    } catch (e) {
+      return 0;  // Upload might fail due to CORS; show 0 Mbps then
+    }
+  }
+
+  startBtn.addEventListener('click', async () => {
+    startBtn.disabled = true;
+    startBtn.textContent = 'Testing...';
+
+    downloadSpan.textContent = '0';
+    uploadSpan.textContent = '0';
+    pingSpan.textContent = '0';
+
+    try {
+      const ping = await measurePing();
+      pingSpan.textContent = ping.toFixed(0);
+
+      const download = await measureDownload();
+      downloadSpan.textContent = download.toFixed(1);
+
+      const upload = await measureUpload();
+      uploadSpan.textContent = upload.toFixed(1);
+
+    } catch (e) {
+      alert('Error running speed test: ' + e.message);
+    } finally {
+      startBtn.disabled = false;
+      startBtn.textContent = 'Start Test';
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,172 +1,2216 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <title>Simple Internet Speed Test</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    body {
-      background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
-      min-height: 100vh;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>English Master</title>
+<style>
+:root{
+  --bg1:#06112b;--bg2:#0d2250;--card:rgba(255,255,255,.06);--card2:rgba(255,255,255,.1);
+  --line:rgba(255,255,255,.12);--txt:#e8f1ff;--mut:#9fb4d9;--acc:#22d3ee;--acc2:#6366f1;
+  --ok:#22c55e;--bad:#f43f5e;--gold:#fbbf24;--r:18px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{
+  font-family:system-ui,-apple-system,"Segoe UI",Arial,"Noto Sans Hebrew",sans-serif;
+  color:var(--txt);line-height:1.6;min-height:100vh;
+  background:radial-gradient(1000px 500px at 85% -10%,#2b5bc055,transparent),
+             radial-gradient(800px 400px at -10% 110%,#22d3ee33,transparent),
+             linear-gradient(160deg,var(--bg1),var(--bg2)) fixed;
+}
+body.no-anim *{animation:none!important;transition:none!important}
+.en{direction:ltr;unicode-bidi:isolate;display:inline-block;font-weight:700;color:#bfefff}
+.hidden{display:none!important}
+button{font:inherit;color:inherit;cursor:pointer}
+h1,h2,h3{margin:.2em 0}
 
-    h1 {
-      font-size: 2.5em;
-      margin-bottom: 10px;
-    }
+/* top bar */
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 18px;background:rgba(6,17,43,.8);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.logo{font-weight:900;font-size:20px;letter-spacing:.5px;background:linear-gradient(90deg,var(--acc),#a5b4fc);
+  -webkit-background-clip:text;background-clip:text;color:transparent;margin-inline-end:auto}
+.nav{display:flex;gap:6px;flex-wrap:wrap}
+.nav button{background:transparent;border:1px solid transparent;padding:7px 12px;border-radius:12px;color:var(--mut)}
+.nav button:hover,.nav button.on{background:var(--card2);color:var(--txt);border-color:var(--line)}
 
-    .results {
-      margin: 20px auto;
-      font-size: 1.5em;
-      max-width: 400px;
-    }
+main{max-width:1000px;margin:0 auto;padding:22px 16px 60px}
+.screen{display:none;animation:fade .35s ease}
+.screen.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-    .results span {
-      font-weight: bold;
-      color: #00c6ff;
-    }
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:18px;
+  backdrop-filter:blur(6px);box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media (max-width:760px){.grid2,.grid3{grid-template-columns:1fr}}
+.muted{color:var(--mut);font-size:14px}
 
-    button {
-      padding: 15px 30px;
-      font-size: 1.2em;
-      background: #00c6ff;
-      color: black;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-top: 30px;
-      transition: background-color 0.3s, color 0.3s;
-    }
+.btn{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:11px 18px;transition:transform .15s,background .2s}
+.btn:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}
+.btn.primary{background:linear-gradient(135deg,var(--acc),var(--acc2));border:none;color:#06112b;font-weight:800}
+.btn.small{padding:6px 12px;font-size:14px;border-radius:10px}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 
-    button:hover:not(:disabled) {
-      background: #0072ff;
-      color: white;
-    }
+.bar{height:12px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));border-radius:99px;transition:width .6s ease}
+.bar.gold>i{background:linear-gradient(90deg,#fde68a,var(--gold))}
 
-    button:disabled {
-      background: #005bbb;
-      color: #ccc;
-      cursor: not-allowed;
-    }
+.hero{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.rankbadge{width:86px;height:86px;border-radius:50%;display:grid;place-items:center;font-size:30px;font-weight:900;
+  background:conic-gradient(var(--acc) var(--p,0%),rgba(255,255,255,.1) 0);position:relative;flex:0 0 auto}
+.rankbadge span{width:70px;height:70px;border-radius:50%;background:#0b1a3e;display:grid;place-items:center}
+.stats-mini{display:flex;gap:10px;flex-wrap:wrap}
+.pill{background:var(--card2);border:1px solid var(--line);border-radius:99px;padding:5px 12px;font-size:14px}
 
-    img {
-      width: 150px;
-      margin-top: 30px;
-    }
-  </style>
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:10px}
+.mode{background:linear-gradient(160deg,rgba(34,211,238,.14),rgba(99,102,241,.14));border:1px solid var(--line);
+  border-radius:16px;padding:16px;text-align:right;transition:transform .15s}
+.mode:hover{transform:translateY(-3px);border-color:var(--acc)}
+.mode b{display:block;font-size:17px;margin-bottom:4px}
+.mode small{color:var(--mut)}
+
+/* map */
+.chapter{display:flex;gap:14px;align-items:center;padding:16px;border-radius:16px;background:var(--card);border:1px solid var(--line);margin-bottom:12px}
+.chapter .num{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-weight:900;font-size:20px;
+  background:linear-gradient(135deg,var(--acc),var(--acc2));color:#06112b;flex:0 0 auto}
+.chapter.locked{opacity:.45}
+.chapter.locked .num{background:rgba(255,255,255,.12);color:var(--mut)}
+.chapter.done .num{background:linear-gradient(135deg,var(--gold),#f59e0b)}
+.chapter .info{flex:1}
+
+/* session */
+.sess-top{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:26px;box-shadow:0 20px 50px rgba(0,0,0,.35);animation:fade .35s ease}
+.qcat{display:inline-block;font-size:13px;color:var(--acc);border:1px solid rgba(34,211,238,.4);border-radius:99px;padding:2px 10px;margin-bottom:10px}
+.qprompt{font-size:22px;font-weight:700;margin:6px 0 20px;min-height:60px}
+.blank{display:inline-block;min-width:80px;border-bottom:3px solid var(--acc);color:var(--acc);text-align:center;padding:0 6px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:600px){.opts{grid-template-columns:1fr}}
+.opt{display:flex;align-items:center;gap:12px;text-align:right;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.06);
+  border:1px solid var(--line);font-size:17px;transition:all .2s}
+.opt:hover:not(:disabled){background:rgba(255,255,255,.14);transform:translateY(-1px)}
+.opt .k{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.1);display:grid;place-items:center;font-size:13px;flex:0 0 auto;color:var(--mut)}
+.opt .ot{flex:1;unicode-bidi:plaintext}
+.opt.correct{background:rgba(34,197,94,.22);border-color:var(--ok)}
+.opt.wrong{background:rgba(244,63,94,.2);border-color:var(--bad)}
+.opt.elim{opacity:.25;text-decoration:line-through}
+.opt:disabled{cursor:default}
+.ctx{min-height:24px;color:var(--gold);margin-top:14px;font-size:15px}
+.feedback{margin-top:16px;padding:14px 16px;border-radius:14px;font-size:16px}
+.feedback.ok{background:rgba(34,197,94,.14);border:1px solid rgba(34,197,94,.5)}
+.feedback.bad{background:rgba(244,63,94,.12);border:1px solid rgba(244,63,94,.45)}
+.qfoot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:10px;flex-wrap:wrap}
+.progress{flex:1}
+.xpfloat{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--gold);color:#1a1200;font-weight:900;
+  padding:8px 16px;border-radius:99px;pointer-events:none;animation:floatup 1.2s ease forwards;z-index:50}
+@keyframes floatup{0%{opacity:0;transform:translate(-50%,20px)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-60px)}}
+
+/* dictionary */
+.wordgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.wordchip{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:right}
+.wordchip .he{color:var(--mut);margin-top:4px;min-height:22px}
+.wordchip .tools{display:flex;gap:6px;margin-top:8px}
+.tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tabs button{padding:7px 14px;border-radius:99px;background:var(--card);border:1px solid var(--line)}
+.tabs button.on{background:var(--acc);color:#06112b;font-weight:700}
+
+/* stats */
+.chart{display:flex;align-items:flex-end;gap:6px;height:180px;padding-top:10px;border-bottom:1px solid var(--line)}
+.chart .col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;position:relative}
+.chart .bar-a{width:100%;max-width:26px;background:rgba(99,102,241,.45);border-radius:6px 6px 0 0;position:relative;min-height:2px}
+.chart .bar-c{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:26px;background:linear-gradient(var(--acc),var(--acc2));border-radius:6px 6px 0 0}
+.chart small{font-size:11px;color:var(--mut);margin-top:4px;white-space:nowrap}
+table{width:100%;border-collapse:collapse}
+th,td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:right}
+th{color:var(--mut);font-weight:600;font-size:14px}
+
+/* achievements */
+.ach{display:flex;gap:12px;align-items:center;padding:14px;border-radius:14px;background:var(--card);border:1px solid var(--line);margin-bottom:10px}
+.ach .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;background:rgba(255,255,255,.08);flex:0 0 auto}
+.ach.got .ic{background:linear-gradient(135deg,var(--gold),#f59e0b)}
+.ach.locked{opacity:.5}
+
+button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+.combo{opacity:0;transform:scale(.8);transition:all .25s}
+.combo.on{opacity:1;transform:scale(1)}
+.combo.hot{animation:pulse .6s ease}
+@keyframes pulse{0%{transform:scale(1)}40%{transform:scale(1.25)}100%{transform:scale(1)}}
+.opt.pop{animation:pop2 .4s ease}
+@keyframes pop2{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+.qcard.shake{animation:shake .4s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(4px)}}
+.confetti{position:fixed;top:-14px;width:9px;height:14px;border-radius:2px;pointer-events:none;z-index:300;animation-name:fall;animation-timing-function:linear;animation-fill-mode:forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:.9}}
+textarea.essay-box{width:100%;min-height:200px;background:rgba(255,255,255,.06);color:var(--txt);border:1px solid var(--line);border-radius:14px;padding:14px;font:inherit;font-size:17px;direction:ltr;text-align:left;line-height:1.7;resize:vertical}
+.sample{white-space:pre-wrap;direction:ltr;text-align:left;background:rgba(255,255,255,.05);border-radius:12px;padding:12px;font:inherit;color:#cfe9ff;margin:0 0 12px}
+.fb{padding:8px 12px;border-radius:10px;margin:6px 0}
+.fb.ok{background:rgba(34,197,94,.14)}
+.fb.bad{background:rgba(244,63,94,.12)}
+button.chapter{width:100%;text-align:right;color:inherit;font:inherit;cursor:pointer}
+.qblock{margin-bottom:18px}
+.qtext{font-size:18px;font-weight:700;margin:0 0 8px}
+.qblock .opt{width:100%;margin:6px 0}
+.opt.on{border-color:var(--acc);background:rgba(34,211,238,.18)}
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.legend span{padding:3px 10px;border-radius:99px;font-size:14px}
+.c-conn{color:#ddd6fe;font-weight:800;background:rgba(167,139,250,.28);border-radius:6px;padding:0 5px}
+.c-cue{color:#bbf7d0;font-weight:800;background:rgba(34,197,94,.22);border-radius:6px;padding:0 5px}
+.c-subj{color:#67e8f9;font-weight:800}
+.c-verb{color:#fde68a;font-weight:800}
+.tip{background:rgba(34,211,238,.1);border-right:4px solid var(--acc);padding:10px 14px;border-radius:12px;margin:10px 0;font-size:16px}
+.rule{background:rgba(251,191,36,.1);border-right:4px solid var(--gold);padding:10px 14px;border-radius:12px;margin:10px 0;font-size:16px}
+.qblock{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:16px}
+.qhead{color:var(--mut);font-size:13px;margin-bottom:4px}
+.qins{font-size:18px;font-weight:800;background:linear-gradient(90deg,rgba(34,211,238,.18),rgba(99,102,241,.15));border-radius:12px;padding:10px 14px;margin-bottom:10px}
+.qeng{font-size:24px;font-weight:800;color:#fde68a;margin:4px 0 12px;direction:ltr;text-align:left}
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:600px){.qopts{grid-template-columns:1fr}}
+.qopt{padding:14px;border-radius:14px;background:rgba(255,255,255,.07);border:2px solid var(--line);font:inherit;font-size:17px;text-align:start;color:inherit;cursor:pointer}
+.qopt:hover{border-color:var(--acc)}
+.qopt.on{border-color:var(--acc);background:rgba(34,211,238,.2)}
+.passage{direction:ltr;text-align:left;font-size:18px;line-height:1.8;background:rgba(255,255,255,.05);border-radius:14px;padding:14px 16px;margin:8px 0 0}
+.bgcard{background:linear-gradient(160deg,rgba(34,211,238,.12),rgba(99,102,241,.12));border:1px solid var(--line);border-radius:18px;padding:18px;text-align:right}
+.bgcard b{font-size:22px}
+.sec-h{margin:22px 0 8px;color:var(--acc)}
+/* overlay */
+.overlay{position:fixed;inset:0;background:rgba(2,6,20,.7);display:grid;place-items:center;z-index:100;padding:20px}
+.modal{background:linear-gradient(160deg,#10275e,#0a1a40);border:1px solid var(--line);border-radius:24px;padding:28px;max-width:420px;text-align:center;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);animation:pop .5s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+.modal .big{font-size:56px;margin-bottom:6px}
+
+#toast{position:fixed;bottom:20px;right:20px;z-index:200;display:flex;flex-direction:column;gap:8px}
+#toast div{background:#0f2350;border:1px solid var(--acc);padding:10px 16px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,.4);animation:fade .3s ease}
+
+.switch{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.switch input{width:20px;height:20px}
+input[type=file]{color:var(--mut)}
+.danger{border-color:rgba(244,63,94,.6);color:#fecdd3}
+</style>
 </head>
 <body>
 
-<h1>🚀 Internet Speed Test</h1>
-<button id="startBtn">Start Test</button>
+<header class="topbar">
+  <div class="logo">English Master</div>
+  <nav class="nav">
+    <button data-go="home" class="on">בית</button>
+    <button data-go="map">מפה</button>
+    <button data-go="essay">כתיבה</button>
+    <button data-go="bagrut">בגרות</button>
+    <button data-go="dict">מילון אישי</button>
+    <button data-go="stats">התקדמות</button>
+    <button data-go="ach">הישגים</button>
+    <button data-go="settings">הגדרות</button>
+  </nav>
+</header>
 
-<div class="results">
-  <p>Download: <span id="download">0</span> Mbps</p>
-  <p>Upload: <span id="upload">0</span> Mbps</p>
-  <p>Ping: <span id="ping">0</span> ms</p>
+<main>
+
+<!-- HOME -->
+<section id="home" class="screen active">
+  <div class="card">
+    <div class="hero">
+      <div class="rankbadge" id="rankRing"><span id="rankNum">1</span></div>
+      <div style="flex:1;min-width:220px">
+        <div class="muted">הדרגה שלך</div>
+        <h2 id="rankTitle">מתחיל</h2>
+        <div class="bar" style="margin:8px 0"><i id="xpBar" style="width:0%"></i></div>
+        <div class="muted"><span id="xpText"></span></div>
+      </div>
+      <div class="stats-mini">
+        <span class="pill">🔥 <span id="streakDays">0</span> ימים ברצף</span>
+        <span class="pill">📘 פרק <span id="curChapter">1</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>המשך מאיפה שעצרת</h3>
+      <p class="muted" id="continueText">אימון מומלץ לפי הרמה שלך</p>
+      <button class="btn primary" id="continueBtn">המשך</button>
+      <div class="muted" style="margin-top:14px">טעויות לתרגול: <b id="mistakeCount">0</b></div>
+    </div>
+    <div class="card">
+      <h3>אתגר יומי</h3>
+      <p class="muted">ענה על 15 שאלות היום, עם לפחות 80% דיוק.</p>
+      <div class="bar gold"><i id="dailyBar" style="width:0%"></i></div>
+      <div class="muted" style="margin-top:8px"><span id="dailyText"></span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>בחר אימון</h3>
+    <div class="mode-grid">
+      <button class="mode" data-start="practice:5"><b>אימון קצר</b><small>5 שאלות · כ-3 דקות</small></button>
+      <button class="mode" data-start="practice:10"><b>אימון רגיל</b><small>10 שאלות · כ-6 דקות</small></button>
+      <button class="mode" data-start="practice:20"><b>אימון מעמיק</b><small>20 שאלות · כ-12 דקות</small></button>
+      <button class="mode" data-start="test:10"><b>מצב מבחן</b><small>ללא רמזים, עם דוח מסכם</small></button>
+      <button class="mode" id="bossBtn"><b>אתגר בוס</b><small id="bossText">נפתח בהתקדמות</small></button>
+    </div>
+    <p class="muted" style="margin-top:14px" id="hintInfo"></p>
+  </div>
+</section>
+
+<!-- MAP -->
+<section id="map" class="screen">
+  <div class="card">
+    <h2>מפת ההתקדמות</h2>
+    <p class="muted">כל פרק נפתח אחרי שליטה מוכחת: לפחות 15 תשובות נכונות בפרק, דיוק של 80% ב-20 התשובות האחרונות, וניצחון באתגר הבוס.</p>
+  </div>
+  <div id="chapters"></div>
+</section>
+
+<!-- SESSION -->
+<section id="session" class="screen">
+  <div id="quizArea">
+    <div class="sess-top">
+      <span class="pill" id="sessLabel"></span>
+      <div class="progress bar"><i id="sessBar" style="width:0%"></i></div>
+      <span class="pill" id="sessCount"></span>
+      <span class="pill combo" id="combo"></span>
+    </div>
+    <div class="qcard" id="qcard">
+      <div class="qcat" id="qcat"></div>
+      <div class="qprompt" id="qprompt"></div>
+      <div class="opts" id="qopts"></div>
+      <div class="ctx" id="qctx"></div>
+      <div class="feedback hidden" id="feedback" role="status" aria-live="polite"></div>
+      <div class="qfoot">
+        <div class="row">
+          <button class="btn" id="hintBtn">רמז</button>
+          <span class="muted" id="hintsLeft"></span>
+        </div>
+        <div class="row">
+          <button class="btn" id="exitBtn">יציאה</button>
+          <button class="btn primary hidden" id="nextBtn">הבא</button>
+        </div>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:10px">קיצורי מקלדת: 1–4 לבחירה, Enter להמשך.</p>
+  </div>
+  <div id="summary" class="hidden"></div>
+</section>
+
+<!-- ESSAY -->
+<section id="essay" class="screen">
+  <div class="card">
+    <h2>כתיבה באנגלית, צעד אחר צעד</h2>
+    <p class="muted">לומדים חלק אחד בכל פעם. השיעור הבא נפתח רק אחרי שעברת את התרגיל בהצלחה.</p>
+    <div class="legend">
+      <span class="c-conn">מילת קישור</span>
+      <span class="c-cue">דעה וסיבה</span>
+      <span class="c-subj">מי עושה</span>
+      <span class="c-verb">מה עושה</span>
+    </div>
+  </div>
+  <div class="card" id="essayTopicCard">
+    <h3>בחר נושא לחיבור</h3>
+    <p class="muted">כל התרגילים יהיו על הנושא שתבחר.</p>
+    <div class="row" id="essayTopics"></div>
+  </div>
+  <div class="card hidden" id="essayCourse"></div>
+  <div id="essayList"></div>
+  <div id="essayLesson" class="hidden">
+    <div class="row" style="margin-bottom:10px"><button class="btn" id="essayBackTop">← חזרה</button></div>
+    <div class="card" id="essayExplain"></div>
+    <div class="card" id="essayExampleCard">
+      <h3>דוגמה</h3>
+      <pre class="sample" id="essayExample"></pre>
+      <div class="row"><button class="btn primary" id="essayStart">הבנתי, תורי לכתוב</button></div>
+    </div>
+    <div id="essayQuiz" class="hidden"></div>
+    <div class="card hidden" id="essayWriteCard">
+      <h3>התרגיל שלך</h3>
+      <p id="essayTask" class="muted" style="white-space:pre-line"></p>
+      <textarea id="essayText" class="essay-box" rows="10" aria-label="Essay text"></textarea>
+      <div class="row" style="margin-top:12px">
+        <button class="btn primary" id="essayCheck">בדוק</button>
+        <span class="muted" id="essayCount"></span>
+        <button class="btn" id="essayBack">חזרה לשיעורים</button>
+      </div>
+      <div id="essayFeedback" role="status" aria-live="polite" style="margin-top:14px"></div>
+    </div>
+  </div>
+</section>
+
+<!-- BAGRUT -->
+<section id="bagrut" class="screen">
+  <div class="card">
+    <h2>הדמיית בגרות באנגלית</h2>
+    <p class="muted">בוחרים כמה יחידות, ומקבלים מבחן מדומה עם זמן. בסוף מקבלים ציון, רשימת טעויות והסברים. זו הדמיה בלבד, ולא המבחן הרשמי, והבנק שלה קטן יותר מהמבחן האמיתי.</p>
+  </div>
+  <div id="bgSetup"></div>
+  <div id="bgExam" class="hidden">
+    <div class="card sess-top">
+      <span class="pill" id="bgTimer">--:--</span>
+      <span class="pill" id="bgUnits"></span>
+      <div style="flex:1"></div>
+      <button class="btn primary" id="bgSubmit">הגשה</button>
+    </div>
+    <div id="bgBody"></div>
+  </div>
+  <div id="bgResult" class="hidden"></div>
+</section>
+
+<!-- DICTIONARY -->
+<section id="dict" class="screen">
+  <div class="card">
+    <h2>המילון האישי</h2>
+    <p class="muted">מילים שנתקלת בהן. לחץ על מילה כדי לראות את תרגומה ומשפט לדוגמה. לא ניתן לחשוף תשובות במהלך מבחן.</p>
+    <div class="tabs" id="dictTabs">
+      <button data-f="all" class="on">הכל</button>
+      <button data-f="fav">מועדפים</button>
+      <button data-f="hard">מילים קשות</button>
+      <button data-f="new">חדשות</button>
+    </div>
+    <div class="wordgrid" id="wordgrid"></div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section id="stats" class="screen">
+  <div class="card">
+    <h2>דוח התקדמות</h2>
+    <div class="grid3" style="margin:14px 0">
+      <div class="pill" style="text-align:center;padding:14px"><div class="muted">סה"כ תשובות</div><b id="stTotal" style="font-size:24px"></b></div>
+      <div class="pill" style="text-align:center;padding:14px"><div class="muted">דיוק כללי</div><b id="stAcc" style="font-size:24px"></b></div>
+      <div class="pill" style="text-align:center;padding:14px"><div class="muted">רצף שיא</div><b id="stBest" style="font-size:24px"></b></div>
+    </div>
+    <h3>14 הימים האחרונים</h3>
+    <div class="chart" id="chart"></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>נקודות חוזק וחולשה</h3>
+      <div id="strengths"></div>
+    </div>
+    <div class="card">
+      <h3>דיוק לפי פרק</h3>
+      <table><thead><tr><th>פרק</th><th>תשובות</th><th>דיוק</th></tr></thead><tbody id="levelTable"></tbody></table>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="ach" class="screen">
+  <div class="card"><h2>הישגים</h2><p class="muted" id="achCount"></p></div>
+  <div id="achList"></div>
+</section>
+
+<!-- SETTINGS -->
+<section id="settings" class="screen">
+  <div class="card">
+    <h3>בנק השאלות</h3>
+    <p class="muted" id="bankInfo"></p>
+  </div>
+  <div class="card">
+    <h2>הגדרות</h2>
+    <div class="switch"><span>צלילי משוב</span><input type="checkbox" id="setSound"></div>
+    <div class="switch"><span>אנימציות</span><input type="checkbox" id="setAnim"></div>
+  </div>
+  <div class="card">
+    <h3>גיבוי והעברה</h3>
+    <p class="muted">ההתקדמות נשמרת בדפדפן הזה. ייצא קובץ גיבוי כדי לשמור אותה או להעביר למכשיר אחר.</p>
+    <div class="row">
+      <button class="btn" id="exportBtn">ייצוא גיבוי</button>
+      <label class="btn" style="cursor:pointer">ייבוא גיבוי<input type="file" id="importFile" accept="application/json" hidden></label>
+    </div>
+  </div>
+  <div class="card">
+    <h3>איפוס</h3>
+    <p class="muted">מוחק את כל ההתקדמות, ה-XP, המילון וההישגים.</p>
+    <button class="btn danger" id="resetBtn">איפוס מלא</button>
+  </div>
+</section>
+
+</main>
+
+<div id="toast" aria-live="polite"></div>
+<div id="overlay" class="overlay hidden">
+  <div class="modal">
+    <div class="big" id="ovIcon">🎉</div>
+    <h2 id="ovT"></h2>
+    <p class="muted" id="ovB"></p>
+    <button class="btn primary" id="ovBtn">המשך</button>
+  </div>
 </div>
 
-<img src="https://media.giphy.com/media/3o7abldj0b3rxrZUxW/giphy.gif" alt="fun gif" />
-
 <script>
-  const startBtn = document.getElementById('startBtn');
-  const downloadSpan = document.getElementById('download');
-  const uploadSpan = document.getElementById('upload');
-  const pingSpan = document.getElementById('ping');
+/* ============================================================
+   DATA
+   ============================================================ */
+const KEY = "english-master-v2";
+const HOUR = 3600000;
+const GAPS = [2, 4, 8, 16];          // מרווחי חזרה (בתשובות) לטעות
+const LEVEL_NAMES = ["יסודות", "שגרה ושיחה", "זמנים ודקדוק", "טקסטים מורכבים", "שליטה מתקדמת"];
+const TITLES = ["מתחיל", "לומד", "תלמיד", "דובר", "שוטף", "מומחה", "מאסטר", "אגדה"];
 
-  // URLs to test (with CORS enabled)
-  const downloadUrl = 'https://file-examples-com.github.io/uploads/2017/10/file-example_PDF_5MB.pdf';
-  const uploadUrl = 'https://httpbin.org/post';  // May still fail CORS for POST
-  const pingUrl = 'https://cors-anywhere.herokuapp.com/https://www.google.com/favicon.ico'; // via CORS proxy
+// [אנגלית, תרגום, רמה, משפט לדוגמה עם ___]
+const RAW = [
+  ["cat","חתול",1,"The ___ is sleeping on the sofa."],
+  ["dog","כלב",1,"My ___ likes to run in the park."],
+  ["book","ספר",1,"I am reading a good ___."],
+  ["water","מים",1,"Can I have a glass of ___, please?"],
+  ["house","בית",1,"Our ___ has three bedrooms."],
+  ["friend","חבר",1,"She is my best ___."],
+  ["red","אדום",1,"The apple is ___."],
+  ["school","בית ספר",1,"The children walk to ___ every morning."],
+  ["morning","בוקר",2,"I wake up early in the ___."],
+  ["hungry","רעב",2,"I am very ___, let's eat now."],
+  ["tired","עייף",2,"After work, I always feel ___."],
+  ["window","חלון",2,"Please open the ___, it is hot."],
+  ["teacher","מורה",2,"Our ___ explains the lesson clearly."],
+  ["kitchen","מטבח",2,"We cook dinner in the ___."],
+  ["expensive","יקר",2,"This watch is very ___."],
+  ["station","תחנה",2,"The train leaves from the ___ at noon."],
+  ["remember","לזכור",3,"I can't ___ her phone number."],
+  ["believe","להאמין",3,"I don't ___ that story at all."],
+  ["difficult","קשה",3,"The exam was very ___."],
+  ["improve","לשפר",3,"You need to ___ your writing skills."],
+  ["opportunity","הזדמנות",3,"This job is a great ___ for you."],
+  ["achieve","להשיג",3,"She works hard to ___ her goals."],
+  ["honest","ישר, כן",3,"He is an ___ person who always tells the truth."],
+  ["suggest","להציע",3,"I ___ that we leave early."],
+  ["ambiguous","דו-משמעי",4,"The instructions were ___ and confusing."],
+  ["consequence","תוצאה, השלכה",4,"Every action has a ___."],
+  ["enormous","עצום",4,"The city has an ___ population."],
+  ["persuade","לשכנע",4,"I tried to ___ him to join us."],
+  ["hesitate","להסס",4,"Don't ___ to ask for help."],
+  ["sustainable","בר-קיימא",4,"We need more ___ energy sources."],
+  ["mitigate","למתן, לצמצם",4,"New laws can ___ the damage to nature."],
+  ["thrive","לשגשג",4,"Plants ___ when they get enough sunlight."],
+  ["meticulous","קפדני",5,"She is ___ about every small detail."],
+  ["pragmatic","מעשי",5,"We need a ___ solution that works today."],
+  ["resilient","עמיד, חסין",5,"Children are often more ___ than adults think."],
+  ["candid","גלוי לב",5,"I appreciate your ___ feedback, even if it hurts."],
+  ["tenacious","עיקש, נחוש",5,"He is ___ and never gives up."],
+  ["ephemeral","חולף, זמני",5,"Fame can be ___, here today and gone tomorrow."],
+  ["eloquent","רהוט, צח לשון",5,"The speaker was ___ and very persuasive."],
+  ["lucid","צלול, ברור",5,"Her explanation was clear and ___."]
+];
+const RAW2 = [
+  ["sun","שמש",1,"The ___ is shining brightly today."],
+  ["moon","ירח",1,"The ___ is very bright tonight."],
+  ["tree","עץ",1,"There is a big ___ in the garden."],
+  ["bread","לחם",1,"I eat ___ with butter for breakfast."],
+  ["milk","חלב",1,"Please buy some ___ at the store."],
+  ["chair","כיסא",1,"Please sit on the ___."],
+  ["table","שולחן",1,"The plates are on the ___."],
+  ["door","דלת",1,"Please close the ___."],
+  ["bed","מיטה",1,"I go to ___ at ten o'clock."],
+  ["shoe","נעל",1,"My ___ is too small."],
+  ["hat","כובע",1,"He wears a warm ___ in winter."],
+  ["phone","טלפון",1,"My ___ is in my bag."],
+  ["bus","אוטובוס",1,"We take the ___ to work."],
+  ["street","רחוב",1,"The shop is on this ___."],
+  ["city","עיר",1,"Tel Aviv is a big ___."],
+  ["big","גדול",1,"The elephant is very ___."],
+  ["small","קטן",1,"The mouse is very ___."],
+  ["happy","שמח",1,"The children are ___ today."],
+  ["sad","עצוב",1,"She felt ___ when her cat was gone."],
+  ["hot","חם",1,"Today is very ___, let's go swimming."],
+  ["cold","קר",1,"In winter the weather is ___."],
+  ["new","חדש",1,"I bought a ___ shirt yesterday."],
+  ["old","ישן, מבוגר",1,"That house is very ___."],
+  ["good","טוב",1,"This pizza is really ___."],
+  ["bad","רע",1,"The weather is ___ today."],
+  ["eat","לאכול",1,"We ___ lunch at one o'clock."],
+  ["drink","לשתות",1,"I want to ___ some juice."],
+  ["sleep","לישון",1,"Children need to ___ early."],
+  ["run","לרוץ",1,"I ___ every morning."],
+  ["swim","לשחות",1,"Can you ___ in the sea?"],
+  ["read","לקרוא",1,"I like to ___ before bed."],
+  ["write","לכתוב",1,"Please ___ your name here."],
+  ["play","לשחק",1,"The kids ___ in the yard."],
+  ["open","לפתוח",1,"Please ___ the box."],
+  ["close","לסגור",1,"Please ___ the window."],
+  ["breakfast","ארוחת בוקר",2,"I have ___ at seven every morning."],
+  ["lunch","ארוחת צהריים",2,"We eat ___ together at school."],
+  ["dinner","ארוחת ערב",2,"Let's have ___ at home tonight."],
+  ["soup","מרק",2,"The ___ is hot, be careful."],
+  ["cheese","גבינה",2,"I like ___ on my sandwich."],
+  ["market","שוק",2,"We buy fresh vegetables at the ___."],
+  ["hospital","בית חולים",2,"My father works at the ___."],
+  ["airport","שדה תעופה",2,"We arrived at the ___ early."],
+  ["ticket","כרטיס",2,"I bought a ___ for the concert."],
+  ["price","מחיר",2,"What is the ___ of this shirt?"],
+  ["money","כסף",2,"I don't have enough ___ for a taxi."],
+  ["wallet","ארנק",2,"My ___ is in my jacket pocket."],
+  ["umbrella","מטרייה",2,"Take an ___, it's raining outside."],
+  ["sunny","שמשי",2,"It's a ___ day, let's go to the beach."],
+  ["cloudy","מעונן",2,"The sky is ___ today."],
+  ["windy","סוער, רוחני",2,"It is very ___ on the hill."],
+  ["quiet","שקט",2,"The library is very ___."],
+  ["busy","עסוק, סואן",2,"The street is ___ at rush hour."],
+  ["early","מוקדם",2,"I got up very ___ today."],
+  ["late","מאוחר",2,"Sorry, I'm ___ for class."],
+  ["often","לעתים קרובות",2,"I ___ visit my grandmother."],
+  ["usually","בדרך כלל",2,"I ___ take the bus to work."],
+  ["never","לעולם לא",2,"I have ___ been to Japan."],
+  ["because","מפני ש",2,"I stayed home ___ I was sick."],
+  ["after","אחרי",2,"We will go out ___ dinner."],
+  ["before","לפני",2,"Wash your hands ___ you eat."],
+  ["brother","אח",2,"My ___ is taller than me."],
+  ["sister","אחות",2,"My ___ lives in London."],
+  ["grandmother","סבתא",2,"My ___ makes the best cookies."],
+  ["neighbor","שכן",2,"Our ___ has a friendly dog."],
+  ["nurse","אחות (רפואית)",2,"The ___ checked my temperature."],
+  ["engineer","מהנדס",2,"My uncle is an ___ in a big company."],
+  ["cook","טבח, לבשל",2,"My father likes to ___ on weekends."],
+  ["clean","נקי, לנקות",2,"Please ___ your room before dinner."],
+  ["achievement","הישג",3,"Finishing the marathon was a great ___."],
+  ["advice","עצה",3,"Can you give me some ___ about my career?"],
+  ["available","זמין",3,"Is the manager ___ right now?"],
+  ["budget","תקציב",3,"We need to plan our ___ for next year."],
+  ["challenge","אתגר",3,"Learning a new language is a real ___."],
+  ["confident","בטוח בעצמו",3,"She felt ___ before the presentation."],
+  ["convince","לשכנע",3,"I couldn't ___ him to change his mind."],
+  ["decision","החלטה",3,"It was a difficult ___ to make."],
+  ["environment","סביבה",3,"We should protect the ___."],
+  ["experience","ניסיון, חוויה",3,"She has a lot of work ___."],
+  ["fortunate","בר מזל",3,"We were ___ to find a parking spot."],
+  ["generous","נדיב",3,"He is very ___ with his time."],
+  ["hardly","בקושי",3,"I could ___ hear the music."],
+  ["influence","השפעה",3,"Parents have a strong ___ on children."],
+  ["journey","מסע",3,"The ___ to the mountains took six hours."],
+  ["knowledge","ידע",3,"Her ___ of history is impressive."],
+  ["launch","להשיק",3,"The company will ___ a new app next month."],
+  ["manage","לנהל, להצליח",3,"I can ___ the project on my own."],
+  ["neglect","להזניח",3,"Don't ___ your health."],
+  ["obvious","ברור מאליו",3,"The answer was ___ to everyone."],
+  ["patient","סבלני",3,"The teacher was very ___ with the students."],
+  ["permit","היתר, לאשר",3,"You need a ___ to park here."],
+  ["plenty","שפע",3,"There is ___ of food for everyone."],
+  ["recognize","לזהות, להכיר",3,"I didn't ___ him at first."],
+  ["regret","להתחרט",3,"I ___ not studying harder."],
+  ["rely","להסתמך",3,"You can ___ on me for help."],
+  ["reputation","מוניטין, שם טוב",3,"The restaurant has an excellent ___."],
+  ["schedule","לוח זמנים",3,"Our ___ changed at the last minute."],
+  ["security","ביטחון",3,"Locks give a sense of ___."],
+  ["separate","להפריד",3,"We need to ___ the recyclable items."],
+  ["sincere","כן, אמיתי",3,"Please accept my ___ apologies."],
+  ["struggle","להיאבק, לשקוע",3,"Many students ___ with math."],
+  ["tolerate","לסבול",3,"I can't ___ loud noise at night."],
+  ["valuable","יקר ערך",3,"This old book is very ___."],
+  ["wisdom","חוכמה",3,"Her ___ helped us solve the problem."],
+  ["warn","להזהיר",3,"The sign ___ people about the dog."],
+  ["accomplish","להשיג, לבצע",4,"We can ___ more when we work together."],
+  ["adapt","להסתגל",4,"Animals ___ to their environment over time."],
+  ["allocate","להקצות",4,"The government will ___ funds to schools."],
+  ["anticipate","לצפות מראש",4,"We ___ a large crowd at the concert."],
+  ["arbitrary","שרירותי",4,"The rules seemed completely ___."],
+  ["assert","לטעון, להצהיר",4,"She continued to ___ her innocence."],
+  ["bias","הטיה",4,"Good research avoids personal ___."],
+  ["candidate","מועמד",4,"Three ___ applied for the job."],
+  ["compelling","משכנע, מרתק",4,"The film told a ___ story."],
+  ["comprehensive","מקיף",4,"The report gives a ___ overview of the topic."],
+  ["concede","להודות, להתפשר",4,"He refused to ___ that he was wrong."],
+  ["contradict","לסתור",4,"Her testimony seems to ___ the evidence."],
+  ["criteria","קריטריונים",4,"What are the ___ for admission?"],
+  ["deteriorate","להידרדר",4,"His health began to ___ last winter."],
+  ["diminish","להקטין, לצמצם",4,"The noise will ___ once the work is done."],
+  ["discrepancy","פער, סתירה",4,"There is a ___ between the two reports."],
+  ["dispute","מחלוקת, להתווכח",4,"The two countries are in a ___ over the border."],
+  ["elaborate","מורכב, לפרט",4,"Could you ___ on your plan?"],
+  ["eminent","בולט, נודע",4,"She is an ___ scientist in her field."],
+  ["empathy","אמפתיה",4,"Good doctors show ___ toward their patients."],
+  ["exhaustive","יסודי ומקיף",4,"The study included an ___ review of the data."],
+  ["feasible","בר ביצוע",4,"Is the plan ___ within our budget?"],
+  ["fluctuate","להשתנות, לתנודד",4,"Prices ___ throughout the year."],
+  ["foster","לטפח",4,"Schools should ___ creativity."],
+  ["frugal","חסכני",4,"They live a ___ life and save most of their income."],
+  ["gratitude","הכרת תודה",4,"She expressed her ___ for the help."],
+  ["hypothesis","השערה",4,"The scientist tested her ___."],
+  ["implement","ליישם",4,"The city will ___ the new policy next year."],
+  ["inevitable","בלתי נמנע",4,"Change is ___ in every organization."],
+  ["jeopardize","לסכן",4,"Careless driving can ___ people's lives."],
+  ["meager","דל, זעום",4,"They survived on a ___ income."],
+  ["negotiate","לנהל משא ומתן",4,"We need to ___ the price of the car."],
+  ["obscure","עמום, לא ידוע",4,"The author is quite ___, few people have heard of him."],
+  ["overwhelm","להציף, להכביד",4,"The amount of homework can ___ students."],
+  ["plausible","סביר, הגיוני",4,"Her explanation sounds ___."],
+  ["reconcile","ליישב, לפייס",4,"After the argument, the brothers ___."],
+  ["reluctant","מהסס",4,"She was ___ to share her opinion."],
+  ["substantial","משמעותי, ניכר",4,"The company made a ___ profit this year."],
+  ["abundant","שופע",5,"The region has ___ natural resources."],
+  ["acquiesce","להסכים בשתיקה",5,"Reluctantly, he decided to ___ to their demands."],
+  ["aesthetic","אסתטי",5,"The building has a clean, modern ___."],
+  ["amend","לתקן, לשנות",5,"The committee voted to ___ the law."],
+  ["apathy","אדישות",5,"Political ___ is a growing concern."],
+  ["arduous","מפרך, קשה מאוד",5,"The climb was long and ___."],
+  ["astute","חד, פיקח",5,"The lawyer was ___ and noticed every detail."],
+  ["benevolent","טוב לב, חסד",5,"The ___ donor funded the new hospital."],
+  ["cognizant","מודע",5,"Are you ___ of the risks involved?"],
+  ["commensurate","מתאים, פרופורציונלי",5,"The salary should be ___ with your experience."],
+  ["conundrum","חידה מסובכת",5,"The problem is a real ___ for the team."],
+  ["corroborate","לאשש, לתמוך בעדות",5,"Two witnesses ___ the story."],
+  ["debilitate","להחליש, לשתק",5,"The illness can ___ the body over time."],
+  ["deference","כבוד, הכנעה מכובדת",5,"He showed ___ to his elders."],
+  ["delineate","לשרטט, לתחום",5,"The report clearly ___ the responsibilities."],
+  ["diligent","חרוץ, שקדן",5,"She is a ___ student who studies every day."],
+  ["dogmatic","דוגמטי",5,"His ___ approach discouraged debate."],
+  ["elucidate","להבהיר",5,"The professor tried to ___ the complex theory."],
+  ["enigmatic","מסתורי",5,"The woman had an ___ smile."],
+  ["equanimity","שלווה, איזון נפשי",5,"She faced the crisis with remarkable ___."],
+  ["exacerbate","להחמיר",5,"Stress can ___ existing health problems."],
+  ["fastidious","קפדן מאוד",5,"He is ___ about the cleanliness of his kitchen."],
+  ["gregarious","חברותי",5,"She is ___ and loves meeting new people."],
+  ["hackneyed","שחוק, נדוש",5,"The speech was full of ___ phrases."],
+  ["impeccable","ללא רבב",5,"Her manners were ___."],
+  ["incisive","חד, חותך",5,"The critic gave an ___ analysis of the film."],
+  ["indifferent","אדיש",5,"The manager seemed ___ to the complaints."],
+  ["jubilant","מלא שמחה",5,"The fans were ___ after the victory."],
+  ["keen","נלהב, חד",5,"He has a ___ eye for detail."],
+  ["laconic","מקוצר, דברן מעט",5,"His ___ reply said only yes."],
+  ["meander","להתפתל, לשוטט",5,"The river will ___ through the valley."],
+  ["nuance","ניואנס, דקות",5,"The book explores the ___ of human emotion."],
+  ["obsolete","מיושן, מיותר",5,"Typewriters are now largely ___."],
+  ["pervasive","חודר לכל",5,"The influence of social media is ___."],
+  ["quintessential","אופייני ביותר",5,"He is the ___ hard-working entrepreneur."],
+  ["reticent","שתקן, מסויג",5,"The witness was ___ about the event."],
+  ["scrupulous","יסודי, ישר",5,"She is ___ about following every rule."],
+  ["succinct","תמציתי",5,"Please keep your answer ___."],
+  ["tacit","שבשתיקה, מובלע",5,"There was a ___ agreement between them."],
+  ["ubiquitous","נמצא בכל מקום",5,"Smartphones have become ___."]
+];
+const WORDS = RAW.concat(RAW2).map(([en, he, lvl, ex]) => ({en, he, lvl, ex}));
 
-  async function measurePing() {
-    const tries = 5;
-    let totalTime = 0;
+// דקדוק קבוע: [id, רמה, שאלה, אפשרויות, תשובה, הסבר]
+const GRAMMAR_CORE = [
+  {id:"g1", lvl:1, p:"I ___ a student.", o:["am","is","are"], a:"am", r:"עם I משתמשים ב-am בהווה."},
+  {id:"g2", lvl:1, p:"She ___ very happy today.", o:["is","are","am"], a:"is", r:"עם she (גוף שלישי יחיד) משתמשים ב-is."},
+  {id:"g3", lvl:1, p:"They ___ at home now.", o:["is","are","am"], a:"are", r:"עם they משתמשים ב-are."},
+  {id:"g4", lvl:1, p:"He ___ coffee every morning.", o:["drink","drinks","drinking"], a:"drinks", r:"בהווה פשוט בגוף שלישי יחיד מוסיפים s לפועל.", ctx:"שים לב לנושא (he) ולזמן הפשוט."},
+  {id:"g5", lvl:2, p:"I have lived here ___ two years.", o:["for","since","during"], a:"for", r:"for מציין משך זמן. since מציין נקודת זמן מסוימת.", ctx:"המשפט מדבר על משך זמן."},
+  {id:"g6", lvl:2, p:"She ___ to the store yesterday.", o:["go","went","goes"], a:"went", r:"went היא צורת העבר הלא סדירה של go.", ctx:"המילה yesterday מורה על זמן עבר."},
+  {id:"g7", lvl:2, p:"If it rains, I ___ stay home.", o:["will","would","am"], a:"will", r:"במשפט תנאי אמיתי (first conditional) משתמשים ב-will בחלק התוצאה."},
+  {id:"g8", lvl:3, p:"If I ___ rich, I would travel the world.", o:["am","was","were"], a:"were", r:"בתנאי לא ממשי (second conditional) משתמשים ב-were לכל הגופים."},
+  {id:"g9", lvl:3, p:"I wish I ___ speak French fluently.", o:["can","could","will"], a:"could", r:"אחרי wish מדברים על מצב לא ממשי ומשתמשים בזמן עבר: could."},
+  {id:"g10", lvl:3, p:"She suggested ___ early.", o:["to leave","leaving","leave"], a:"leaving", r:"אחרי suggest בא בדרך כלל פועל בצורת -ing."},
+  {id:"g11", lvl:4, p:"Hardly ___ the door when the phone rang.", o:["I had closed","had I closed","I closed"], a:"had I closed", r:"אחרי hardly בתחילת המשפט משתמשים בהיפוך: Hardly had I...", ctx:"המשפט מתחיל בתואר הפועל, ולכן יש היפוך."},
+  {id:"g12", lvl:4, p:"He insisted that she ___ present at the meeting.", o:["is","be","was"], a:"be", r:"אחרי insist בנוסח that משתמשים בצורת הבסיס של הפועל (subjunctive)."},
+  {id:"g13", lvl:5, p:"Not until midnight ___ he finish the report.", o:["he did","did he","he had"], a:"did he", r:"כשמשפט מתחיל ב-Not until נדרש היפוך: did he finish."},
+  {id:"g14", lvl:5, p:"Were it not for your help, I ___ have failed.", o:["would","will","had"], a:"would", r:"זהו תנאי לא ממשי בזמן עבר: Were it not for ..., I would have..."},
+  {id:"g15", lvl:5, p:"Despite ___ tired, she kept working.", o:["be","being","been"], a:"being", r:"אחרי despite מופיעה בדרך כלל צורת -ing."}
+];
 
-    for(let i = 0; i < tries; i++) {
-      const start = performance.now();
-      try {
-        await fetch(pingUrl, { cache: "no-cache" });
-      } catch(e) {
-        // Ignore errors
+const GRAMMAR_EXTRA = [
+  {id:"g16", lvl:1, p:"We ___ from Israel.", o:["am","is","are"], a:"are", r:"עם we משתמשים ב-are."},
+  {id:"g17", lvl:1, p:"It ___ a beautiful day.", o:["is","are","am"], a:"is", r:"עם it משתמשים ב-is."},
+  {id:"g18", lvl:1, p:"My brother ___ tall.", o:["am","is","are"], a:"is", r:"שם עצם יחיד (my brother) מקבל is."},
+  {id:"g19", lvl:1, p:"I ___ like pizza.", o:["don't","doesn't","isn't"], a:"don't", r:"בשלילה עם I משתמשים ב-don't."},
+  {id:"g20", lvl:1, p:"She ___ like coffee.", o:["don't","doesn't","isn't"], a:"doesn't", r:"בשלילה בגוף שלישי יחיד משתמשים ב-doesn't."},
+  {id:"g21", lvl:1, p:"___ you a student?", o:["Are","Is","Do"], a:"Are", r:"בשאלה עם you משתמשים ב-Are בתחילת המשפט."},
+  {id:"g22", lvl:1, p:"There ___ two apples on the table.", o:["is","are","am"], a:"are", r:"עם שם עצם ברבים משתמשים ב-are."},
+  {id:"g23", lvl:1, p:"There ___ a cat under the bed.", o:["is","are","am"], a:"is", r:"עם שם עצם ביחיד משתמשים ב-is."},
+  {id:"g24", lvl:1, p:"We ___ football on Saturdays.", o:["play","plays","playing"], a:"play", r:"בהווה פשוט עם we לא מוסיפים s לפועל."},
+  {id:"g25", lvl:1, p:"Look! The birds ___ in the sky.", o:["fly","flies","are flying"], a:"are flying", r:"Look! מציין פעולה שמתרחשת עכשיו, לכן זמן הווה מתמשך."},
+  {id:"g26", lvl:2, p:"I ___ my homework yesterday.", o:["did","done","do"], a:"did", r:"העבר של do הוא did."},
+  {id:"g27", lvl:2, p:"She ___ never been to Paris.", o:["has","have","had"], a:"has", r:"עם she משתמשים ב-has בזמן הווה מושלם."},
+  {id:"g28", lvl:2, p:"They ___ dinner when I arrived.", o:["were eating","ate","eat"], a:"were eating", r:"פעולה שנמשכה בעבר וקטעה אותה פעולה אחרת: עבר מתמשך."},
+  {id:"g29", lvl:2, p:"He is ___ than his brother.", o:["tall","taller","tallest"], a:"taller", r:"השוואה בין שניים מסתיימת ב-er."},
+  {id:"g30", lvl:2, p:"This is ___ book I have ever read.", o:["the best","better","best"], a:"the best", r:"בהשוואה עליונה משתמשים ב-the לפני best."},
+  {id:"g31", lvl:2, p:"I'm going to visit my grandmother ___ weekend.", o:["on","in","at"], a:"on", r:"עם ימים בשבוע משתמשים ב-on."},
+  {id:"g32", lvl:2, p:"We ___ at the cinema at 8 PM.", o:["meet","meeting","meets"], a:"meet", r:"אחרי we בהווה פשוט לא מוסיפים s."},
+  {id:"g33", lvl:2, p:"She has ___ idea where he went.", o:["no","none","nothing"], a:"no", r:"לפני שם עצם משתמשים ב-no במשמעות 'אין'."},
+  {id:"g34", lvl:2, p:"The movie starts at ___ o'clock.", o:["seven","sevens","seventh"], a:"seven", r:"שעה מדויקת נאמרת במספר רגיל."},
+  {id:"g35", lvl:2, p:"He ___ in this company for five years.", o:["has worked","worked","works"], a:"has worked", r:"משך זמן שמתחיל בעבר ונמשך עד היום: Present Perfect."},
+  {id:"g36", lvl:3, p:"If you ___ harder, you would pass the test.", o:["studied","study","will study"], a:"studied", r:"בתנאי לא ממשי משתמשים בזמן עבר פשוט בחלק התנאי."},
+  {id:"g37", lvl:3, p:"I would have called you if I ___ your number.", o:["had had","have had","had"], a:"had had", r:"בתנאי לא ממשי בעבר משתמשים ב-had had."},
+  {id:"g38", lvl:3, p:"By next year, I ___ living here for a decade.", o:["will have been","will be","am"], a:"will have been", r:"Future Perfect Continuous מציין משך זמן עד נקודה בעתיד."},
+  {id:"g39", lvl:3, p:"He denied ___ the window.", o:["breaking","to break","break"], a:"breaking", r:"אחרי deny בא -ing."},
+  {id:"g40", lvl:3, p:"I'd rather you ___ tell him now.", o:["didn't","don't","won't"], a:"didn't", r:"אחרי would rather כשמדברים על אדם אחר משתמשים בזמן עבר."},
+  {id:"g41", lvl:3, p:"The book ___ by millions of people is famous.", o:["read","reading","reads"], a:"read", r:"במשפט עם פסיבי מקוצר משתמשים בצורת העבר השלישית של הפועל."},
+  {id:"g42", lvl:3, p:"It's time we ___ home.", o:["left","leave","leaving"], a:"left", r:"אחרי It's time משתמשים בזמן עבר לדבר על משהו שצריך לקרות עכשיו."},
+  {id:"g43", lvl:3, p:"Had I ___ earlier, I would have caught the bus.", o:["left","leave","leaving"], a:"left", r:"Had I + עבר שלישי משמש לתנאי לא ממשי בעבר."},
+  {id:"g44", lvl:3, p:"I'm sorry, I ___ forgotten your name.", o:["have","has","had"], a:"have", r:"עם I בזמן הווה מושלם משתמשים ב-have."},
+  {id:"g45", lvl:3, p:"Make sure you ___ the door before you leave.", o:["lock","locking","locked"], a:"lock", r:"אחרי make sure בא פועל בצורת הבסיס."},
+  {id:"g46", lvl:4, p:"Not only ___ she smart, but she is also kind.", o:["is","does","was"], a:"is", r:"אחרי Not only במשפט פותח משתמשים בהיפוך: Not only is she..."},
+  {id:"g47", lvl:4, p:"The house ___ built in 1920 still stands today.", o:["was","is","has"], a:"was", r:"הבית נבנה בעבר, ולכן משתמשים בזמן עבר בפסיבי."},
+  {id:"g48", lvl:4, p:"No sooner ___ she arrived than it started raining.", o:["had","did","was"], a:"had", r:"No sooner ... than דורש Past Perfect בחלק הראשון."},
+  {id:"g49", lvl:4, p:"It is essential that every student ___ the form.", o:["submit","submits","submitted"], a:"submit", r:"אחרי ביטויים כמו essential that משתמשים בצורת הבסיס."},
+  {id:"g50", lvl:4, p:"The results, ___ were published yesterday, surprised everyone.", o:["which","who","whom"], a:"which", r:"כשמדובר בדבר (results) משתמשים ב-which, לא ב-who."},
+  {id:"g51", lvl:4, p:"Had they ___ the warning, they would have left.", o:["heeded","heed","heeding"], a:"heeded", r:"בתנאי לא ממשי בעבר בא פועל בעבר שלישי: heeded."},
+  {id:"g52", lvl:4, p:"She talks as if she ___ the answer.", o:["knew","knows","know"], a:"knew", r:"אחרי as if מדברים על מצב לא ממשי ומשתמשים בזמן עבר."},
+  {id:"g53", lvl:4, p:"Scarcely ___ the news when she burst into tears.", o:["had she heard","she had heard","she heard"], a:"had she heard", r:"Scarcely בתחילת משפט דורש היפוך: had she heard..."},
+  {id:"g54", lvl:4, p:"The committee recommended that the plan ___ revised.", o:["be","is","was"], a:"be", r:"אחרי recommend that משתמשים בצורת הבסיס (subjunctive)."},
+  {id:"g55", lvl:4, p:"Despite ___ the exam, he failed.", o:["studying","to study","study"], a:"studying", r:"אחרי despite משתמשים ב-ing."},
+  {id:"g56", lvl:5, p:"Little ___ she know about the plan.", o:["did","does","was"], a:"did", r:"Little בתחילת משפט מחייב היפוך עם did בעבר פשוט."},
+  {id:"g57", lvl:5, p:"Under no circumstances ___ the door be opened.", o:["should","would","did"], a:"should", r:"Under no circumstances בתחילת משפט מחייב היפוך: should the door be opened."},
+  {id:"g58", lvl:5, p:"She regrets ___ the offer.", o:["rejecting","to reject","rejected"], a:"rejecting", r:"אחרי regret לפעולה שכבר התרחשה בא -ing."},
+  {id:"g59", lvl:5, p:"Were he to ___ the truth, things would change.", o:["reveal","revealed","reveals"], a:"reveal", r:"Were he to + צורת הבסיס משמש לתנאי פורמלי או לא סביר."},
+  {id:"g60", lvl:5, p:"The more you practice, ___ you become.", o:["the better","better","the best"], a:"the better", r:"המבנה The more..., the better מציין שפרופורציה ישירה."},
+  {id:"g61", lvl:5, p:"Rarely ___ such a talented writer.", o:["have I met","I have met","I met"], a:"have I met", r:"Rarely בתחילת משפט מחייב היפוך."},
+  {id:"g62", lvl:5, p:"It is high time the government ___ action.", o:["took","takes","take"], a:"took", r:"It is high time מלווה בזמן עבר פשוט לדבר על פעולה שהגיעה שעתה."},
+  {id:"g63", lvl:5, p:"She insisted on ___ the bill herself.", o:["paying","to pay","pay"], a:"paying", r:"אחרי insist on בא -ing."},
+  {id:"g64", lvl:5, p:"Had it not been for the rain, we ___ the match.", o:["would have won","would win","will win"], a:"would have won", r:"תנאי לא ממשי בעבר: would have + עבר שלישי."},
+  {id:"g65", lvl:5, p:"Seldom ___ such dedication in a young athlete.", o:["have we seen","we have seen","we saw"], a:"have we seen", r:"Seldom בתחילת משפט מחייב היפוך."}
+];
+const GRAMMAR = GRAMMAR_CORE.concat(GRAMMAR_EXTRA);
+const QUESTION_BANK_SIZE = WORDS.length * 3 + GRAMMAR.length;
+
+const VERBS = [
+  {b:"go",p:"went"},{b:"eat",p:"ate"},{b:"see",p:"saw"},{b:"write",p:"wrote"},{b:"take",p:"took"},
+  {b:"make",p:"made"},{b:"buy",p:"bought"},{b:"think",p:"thought"},{b:"play",p:"played"},
+  {b:"walk",p:"walked"},{b:"find",p:"found"},{b:"come",p:"came"},{b:"read",p:"read"},{b:"give",p:"gave"}
+];
+const NOUNS = [
+  {s:"child",p:"children"},{s:"mouse",p:"mice"},{s:"city",p:"cities"},{s:"box",p:"boxes"},
+  {s:"knife",p:"knives"},{s:"tooth",p:"teeth"},{s:"bus",p:"buses"},{s:"day",p:"days"},{s:"man",p:"men"}
+];
+const ADJS = [
+  {b:"big",c:"bigger"},{b:"small",c:"smaller"},{b:"fast",c:"faster"},{b:"happy",c:"happier"},
+  {b:"good",c:"better"},{b:"bad",c:"worse"},{b:"beautiful",c:"more beautiful"},{b:"expensive",c:"more expensive"}
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+function defaultState(){
+  return {
+    xp:0, currentLevel:1, lp:{}, answered:0, streakDays:0, lastActive:"",
+    bestStreak:0, days:{}, cats:{}, mistakes:{}, seen:{}, fav:{}, hard:{},
+    hints:[], itemXp:{date:"", counts:{}}, daily:{date:"", done:0, correct:0, claimed:false},
+    ach:{}, masteredCount:0, dailyWins:0, lastMode:"practice",
+    essay:{done:{}, drafts:{}, basics:{}, topic:""},
+    bagrut:{results:[]},
+    settings:{sound:true, anim:true}
+  };
+}
+function sanitizeState(o){
+  o = (o && typeof o === "object" && !Array.isArray(o)) ? o : {};
+  const d = defaultState();
+  const num = (v, f) => (typeof v === "number" && isFinite(v) && v >= 0) ? Math.floor(v) : f;
+  const obj = v => (v && typeof v === "object" && !Array.isArray(v)) ? v : {};
+  const keepIf = (src, test) => Object.fromEntries(Object.entries(obj(src)).filter(([, v]) => test(v)));
+  const isStat = v => !!v && typeof v.a === "number" && typeof v.c === "number";
+  const mistakes = keepIf(o.mistakes, m => !!m && !!m.q && Array.isArray(m.q.options) && typeof m.q.answer === "string" && typeof m.nextIdx === "number");
+  const lp = keepIf(o.lp, v => !!v && typeof v.c === "number" && typeof v.a === "number" && Array.isArray(v.recent));
+  Object.values(lp).forEach(v => { v.recent = v.recent.filter(x => typeof x === "boolean").slice(-20); v.bossPassed = v.bossPassed === true; });
+  const ix = obj(o.itemXp), dl = obj(o.daily), s = obj(o.settings), es = obj(o.essay), bg = obj(o.bagrut);
+  return {
+    ...d,
+    xp: num(o.xp, 0),
+    currentLevel: Math.max(1, num(o.currentLevel, 1)),
+    answered: num(o.answered, 0),
+    streakDays: num(o.streakDays, 0),
+    bestStreak: num(o.bestStreak, 0),
+    masteredCount: num(o.masteredCount, 0),
+    dailyWins: num(o.dailyWins, 0),
+    lastActive: typeof o.lastActive === "string" ? o.lastActive : "",
+    lastMode: o.lastMode === "test" ? "test" : "practice",
+    hints: Array.isArray(o.hints) ? o.hints.filter(t => typeof t === "number" && isFinite(t)).slice(-3) : [],
+    days: keepIf(o.days, isStat),
+    cats: keepIf(o.cats, isStat),
+    mistakes, lp,
+    seen: keepIf(o.seen, v => v === true),
+    fav: keepIf(o.fav, v => v === true),
+    hard: keepIf(o.hard, v => v === true),
+    ach: keepIf(o.ach, v => v === true),
+    itemXp: {date: typeof ix.date === "string" ? ix.date : "", counts: keepIf(ix.counts, v => typeof v === "number")},
+    daily: {date: typeof dl.date === "string" ? dl.date : "", done: num(dl.done, 0), correct: num(dl.correct, 0), claimed: dl.claimed === true},
+    bagrut: {results: Array.isArray(bg.results) ? bg.results.filter(r => r && typeof r.score === "number" && [3, 4, 5].includes(r.units)).slice(0, 10) : []},
+    essay: {done: keepIf(es.done, v => v === true), drafts: keepIf(es.drafts, v => typeof v === "string"), basics: keepIf(es.basics, v => v === true), topic: typeof es.topic === "string" ? es.topic : ""},
+    settings: {sound: s.sound !== false, anim: s.anim !== false}
+  };
+}
+let state = load();
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(!raw) return defaultState();
+    const obj = JSON.parse(raw);
+    return sanitizeState(obj);
+  }catch(e){ return defaultState(); }
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const todayStr = () => new Date().toLocaleDateString("en-CA");
+const yesterdayStr = () => new Date(Date.now() - 864e5).toLocaleDateString("en-CA");
+const pick = a => a[Math.floor(Math.random() * a.length)];
+function shuffle(a){
+  const r = a.slice();
+  for(let i = r.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [r[i], r[j]] = [r[j], r[i]];
+  }
+  return r;
+}
+function opts(correct, pool){
+  const others = shuffle([...new Set(pool.filter(x => x !== correct))]).slice(0, 3);
+  return shuffle([correct, ...others]);
+}
+function toast(msg){
+  const d = document.createElement("div");
+  d.textContent = msg;
+  $("toast").appendChild(d);
+  setTimeout(() => d.remove(), 2800);
+}
+function beep(freq, dur){
+  if(!state.settings.sound) return;
+  try{
+    window._actx = window._actx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = _actx.createOscillator(), g = _actx.createGain();
+    o.type = "sine"; o.frequency.value = freq; g.gain.value = 0.08;
+    o.connect(g); g.connect(_actx.destination);
+    o.start(); g.gain.exponentialRampToValueAtTime(0.0001, _actx.currentTime + dur);
+    o.stop(_actx.currentTime + dur);
+  }catch(e){}
+}
+function overlay(icon, title, body, btn, cb){
+  $("ovIcon").textContent = icon;
+  $("ovT").textContent = title;
+  $("ovB").textContent = body;
+  $("ovBtn").textContent = btn || "המשך";
+  $("overlay").classList.remove("hidden");
+  $("ovBtn").onclick = () => { $("overlay").classList.add("hidden"); cb && cb(); };
+}
+function catName(c){
+  return {word:"אוצר מילים", fill:"השלמת משפט", grammar:"דקדוק", past:"זמן עבר", plural:"רבים", comp:"השוואה"}[c] || c;
+}
+function touchDay(){
+  const t = todayStr();
+  if(state.lastActive === t) return;
+  state.streakDays = state.lastActive === yesterdayStr() ? state.streakDays + 1 : 1;
+  state.lastActive = t;
+}
+
+/* XP & rank */
+function rankOf(xp){ return Math.floor(Math.sqrt(xp / 30)) + 1; }
+function thresholdFor(r){ return 30 * (r - 1) * (r - 1); }
+function titleOf(r){ return TITLES[Math.min(Math.floor((r - 1) / 3), TITLES.length - 1)]; }
+function addXp(n){
+  const before = rankOf(state.xp);
+  state.xp += n;
+  const after = rankOf(state.xp);
+  if(after > before){
+    confetti(80);
+    overlay("⭐", "עלית לדרגה " + after, "הדרגה החדשה שלך: " + titleOf(after) + ". כל הכבוד!", "יאללה");
+  }
+}
+
+/* hints: עד 3 בחלון מתגלגל של שעה */
+function hintsLeft(){
+  const now = Date.now();
+  state.hints = state.hints.filter(t => now - t < HOUR);
+  return 3 - state.hints.length;
+}
+function hintResetText(){
+  if(!state.hints.length) return "";
+  const ms = state.hints[0] + HOUR - Date.now();
+  const m = Math.max(1, Math.ceil(ms / 60000));
+  return "הרמז הבא יתחדש בעוד " + m + " דקות";
+}
+
+/* levels & gating */
+function lpOf(L){
+  state.lp[L] = state.lp[L] || {c:0, a:0, recent:[], bossPassed:false};
+  return state.lp[L];
+}
+function recentAcc(lp){
+  if(!lp.recent.length) return 0;
+  return lp.recent.filter(Boolean).length / lp.recent.length;
+}
+function bossAvailable(){
+  const lp = lpOf(state.currentLevel);
+  return lp.c >= 15 && lp.recent.length >= 20 && recentAcc(lp) >= 0.8 && !lp.bossPassed;
+}
+
+/* ============================================================
+   QUESTION GENERATION
+   ============================================================ */
+function kindsFor(L){
+  const k = ["vocab_he", "vocab_en", "fill"];
+  if(GRAMMAR.some(g => g.lvl <= Math.min(L, 5))) k.push("grammar");
+  if(L >= 2) k.push("past", "plural");
+  if(L >= 3) k.push("comp");
+  return k;
+}
+function wordPool(L, strict){
+  const base = Math.min(L, 5);
+  const lower = WORDS.filter(w => w.lvl < base);
+  if(!strict && lower.length && Math.random() < 0.3) return lower;
+  return WORDS.filter(w => w.lvl === base);
+}
+
+function makeQuestion(L, strict){
+  const kind = pick(kindsFor(L));
+  const base = Math.min(L, 5);
+
+  if(kind === "vocab_he" || kind === "vocab_en" || kind === "fill"){
+    const w = pick(wordPool(L, strict));
+    const sameLevel = WORDS.filter(x => x.lvl === w.lvl && x.en !== w.en);
+    if(kind === "vocab_he"){
+      return {key:"w:"+w.en, cat:"word", lvl:w.lvl,
+        prompt:`מה המשמעות של <span class="en">${w.en}</span>?`,
+        options: opts(w.he, sameLevel.map(x => x.he)), answer: w.he,
+        exp: `${w.en} = ${w.he}`,
+        ctx: `המילה מתחילה באות "${w.en[0].toUpperCase()}" ויש בה ${w.en.length} אותיות.`,
+        rule: `המילה ${w.en} פירושה: ${w.he}.`};
+    }
+    if(kind === "vocab_en"){
+      return {key:"w:"+w.en, cat:"word", lvl:w.lvl,
+        prompt:`איך אומרים באנגלית "${w.he}"?`,
+        options: opts(w.en, sameLevel.map(x => x.en)), answer: w.en,
+        exp: `${w.en} = ${w.he}`,
+        ctx: `התשובה מתחילה באות "${w.en[0]}".`,
+        rule: `${w.en} = ${w.he}.`};
+    }
+    return {key:"f:"+w.en, cat:"fill", lvl:w.lvl,
+      prompt:`השלם את המשפט:<br><span class="en">${w.ex.replace("___", '<span class="blank">___</span>')}</span>`,
+      options: opts(w.en, sameLevel.map(x => x.en)), answer: w.en,
+      exp: `${w.en} (${w.he}). במשפט: ${w.ex.replace("___", w.en)}`,
+      ctx: "שים לב להקשר המשפט ולמשמעות המילה.",
+      rule: `המילה הנכונה היא ${w.en}, שפירושה ${w.he}.`};
+  }
+
+  if(kind === "grammar"){
+    const g = pick(GRAMMAR.filter(x => x.lvl <= base));
+    return {key:"g:"+g.id, cat:"grammar", lvl:g.lvl,
+      prompt: g.p.replace("___", '<span class="blank">___</span>'),
+      options: shuffle(g.o), answer: g.a,
+      exp: `התשובה: ${g.a}. ${g.r}`,
+      ctx: g.ctx || "שים לב לנושא המשפט ולזמן שבו הוא נאמר.",
+      rule: g.r};
+  }
+
+  if(kind === "past"){
+    const v = pick(VERBS);
+    return {key:"p:"+v.b, cat:"past", lvl:L,
+      prompt:`מה זמן העבר (Past Simple) של <span class="en">${v.b}</span>?`,
+      options: opts(v.p, VERBS.map(x => x.p)), answer: v.p,
+      exp: `${v.b} → ${v.p}`,
+      ctx: "בפעלים רגולריים מוסיפים -ed, אבל יש הרבה פעלים לא סדירים שצריך לזכור.",
+      rule: `צורת העבר של ${v.b} היא ${v.p}.`};
+  }
+
+  if(kind === "plural"){
+    const n = pick(NOUNS);
+    const wrong = [n.s + "s", ...NOUNS.filter(x => x !== n).map(x => x.p)];
+    return {key:"n:"+n.s, cat:"plural", lvl:L,
+      prompt:`מה צורת הרבים של <span class="en">${n.s}</span>?`,
+      options: opts(n.p, wrong), answer: n.p,
+      exp: `${n.s} → ${n.p}`,
+      ctx: "לא כל שמות העצם מקבלים s. שים לב לאותיות הסיום.",
+      rule: `צורת הרבים של ${n.s} היא ${n.p}.`};
+  }
+
+  // comp
+  const a = pick(ADJS);
+  const wrong = [a.b + "er", "more " + a.b, ...ADJS.filter(x => x !== a).map(x => x.c)];
+  return {key:"a:"+a.b, cat:"comp", lvl:L,
+    prompt:`מה הצורה ההשוואתית (Comparative) של <span class="en">${a.b}</span>?`,
+    options: opts(a.c, wrong), answer: a.c,
+    exp: `${a.b} → ${a.c}`,
+    ctx: "במילים קצרות מוסיפים -er, ובמילים ארוכות בדרך כלל more.",
+    rule: `הצורה ההשוואתית של ${a.b} היא ${a.c}.`};
+}
+
+/* ============================================================
+   SESSION
+   ============================================================ */
+let sess = null;
+let cur = null;
+
+function startSession(mode, count){
+  if(mode === "boss" && !bossAvailable()){
+    toast("אתגר הבוס ייפתח לאחר שליטה מספקת בפרק");
+    return;
+  }
+  sess = {mode, total: count, n: 0, correct: 0, streak: 0, log: [], xpGain: 0, finished: false};
+  updateCombo();
+  state.lastMode = mode === "boss" ? "practice" : mode;
+  save();
+  show("session");
+  nextQuestion();
+}
+
+function nextQuestion(){
+  if(!sess || sess.finished) return;
+  if(sess.n >= sess.total) return finishSession();
+  sess.n++;
+  const L = state.currentLevel;
+  let q;
+
+  if(sess.mode === "practice"){
+    const due = Object.entries(state.mistakes).filter(([k, m]) => m.nextIdx <= state.answered);
+    if(due.length && Math.random() < 0.4){
+      const [, m] = pick(due);
+      q = {...m.q, options: shuffle(m.q.options), wasMistake: true};
+    }
+  }
+  if(!q) q = makeQuestion(L, sess.mode === "boss");
+  cur = {q, done: false, hintStage: 0};
+  $("quizArea").classList.remove("hidden");
+  $("summary").classList.add("hidden");
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = cur.q;
+  $("sessLabel").textContent = sess.mode === "boss" ? "אתגר בוס" : sess.mode === "test" ? "מצב מבחן" : "אימון · פרק " + state.currentLevel;
+  $("sessCount").textContent = sess.n + " / " + sess.total;
+  $("sessBar").style.width = ((sess.n - 1) / sess.total * 100) + "%";
+  $("qcat").textContent = catName(q.cat) + (q.wasMistake ? " · חזרה על טעות" : "");
+  $("qprompt").innerHTML = q.prompt;
+  $("qctx").textContent = "";
+  $("feedback").className = "feedback hidden";
+  $("nextBtn").classList.add("hidden");
+  const box = $("qopts");
+  box.innerHTML = "";
+  q.options.forEach((o, i) => {
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.innerHTML = '<span class="k">' + (i + 1) + '</span><span class="ot"></span>';
+    b.querySelector(".ot").textContent = o;
+    b.onclick = () => answer(i);
+    box.appendChild(b);
+  });
+  const practice = sess.mode === "practice";
+  $("hintBtn").classList.toggle("hidden", !practice);
+  $("hintsLeft").textContent = practice ? "רמזים זמינים: " + hintsLeft() + " / 3" : "";
+}
+
+function answer(i){
+  if(!cur || cur.done) return;
+  cur.done = true;
+  const q = cur.q;
+  const chosen = q.options[i];
+  const ok = chosen === q.answer;
+  const btns = document.querySelectorAll("#qopts .opt");
+  btns.forEach((b, j) => {
+    b.disabled = true;
+    if(q.options[j] === q.answer) b.classList.add("correct");
+    else if(j === i && !ok) b.classList.add("wrong");
+  });
+  if(ok) flash(btns[i], "pop"); else flash($("qcard"), "shake");
+  record(ok, q, chosen);
+
+  const fb = $("feedback");
+  fb.className = "feedback " + (ok ? "ok" : "bad");
+  fb.textContent = ok
+    ? "✔ נכון! " + q.exp
+    : "✘ לא נכון. התשובה הנכונה: " + q.answer + ". " + q.exp;
+  $("nextBtn").textContent = sess.n >= sess.total ? "לסיכום" : "הבא";
+  $("nextBtn").classList.remove("hidden");
+  $("hintBtn").classList.add("hidden");
+  $("sessBar").style.width = (sess.n / sess.total * 100) + "%";
+  beep(ok ? 880 : 220, ok ? 0.15 : 0.3);
+  save();
+}
+
+function record(ok, q, chosen){
+  const now = todayStr();
+  touchDay();
+  state.answered++;
+
+  // יום
+  const d = state.days[now] = state.days[now] || {a:0, c:0};
+  d.a++; if(ok) d.c++;
+  // קטגוריה
+  const c = state.cats[q.cat] = state.cats[q.cat] || {a:0, c:0};
+  c.a++; if(ok) c.c++;
+  // מילון
+  if(q.key.startsWith("w:") || q.key.startsWith("f:")) state.seen[q.key.slice(2)] = true;
+
+  // התקדמות פרק (תרגול בלבד)
+  if(sess.mode === "practice"){
+    const lp = lpOf(state.currentLevel);
+    lp.a++; if(ok) lp.c++;
+    lp.recent.push(ok); if(lp.recent.length > 20) lp.recent.shift();
+  }
+  if(sess.mode === "boss"){
+    const lp = lpOf(state.currentLevel);
+    lp.bossA = (lp.bossA || 0) + 1; if(ok) lp.bossC = (lp.bossC || 0) + 1;
+  }
+
+  // טעויות וחזרות מרווחות
+  const m = state.mistakes[q.key];
+  if(ok){
+    if(m){
+      m.correctRuns++;
+      m.gap = Math.min(m.gap + 1, GAPS.length - 1);
+      if(m.correctRuns >= 3){
+        delete state.mistakes[q.key];
+        state.masteredCount++;
+        toast("שלטת בפריט הזה! 🎯");
+      } else {
+        m.nextIdx = state.answered + GAPS[m.gap];
       }
-      const end = performance.now();
-      totalTime += (end - start);
     }
-    return totalTime / tries;
+  } else {
+    state.mistakes[q.key] = {
+      q: {key:q.key, cat:q.cat, lvl:q.lvl, prompt:q.prompt, options:q.options, answer:q.answer,
+          exp:q.exp, ctx:q.ctx, rule:q.rule},
+      correctRuns: 0, gap: 0, nextIdx: state.answered + GAPS[0]
+    };
   }
 
-  async function measureDownload() {
-    const start = performance.now();
-    const response = await fetch(downloadUrl, { cache: "no-cache" });
-    const blob = await response.blob();
-    const end = performance.now();
+  // XP
+  if(ok){
+    sess.streak++;
+    state.bestStreak = Math.max(state.bestStreak, sess.streak);
+    if(sess.mode !== "test"){
+      let gain = 10 * (1 + Math.min(sess.streak, 10) * 0.05);
+      if(q.wasMistake) gain += 5;
+      const used = cur.hintStage || 0;
+      gain = gain * (1 - 0.2 * used);
+      const dayX = state.itemXp.date === now ? state.itemXp : {date:now, counts:{}};
+      state.itemXp = dayX;
+      if((dayX.counts[q.key] || 0) >= 2){
+        gain = 0;
+        toast("ה-XP על הפריט הזה כבר נוצל היום. המשך להתקדם!");
+      } else {
+        dayX.counts[q.key] = (dayX.counts[q.key] || 0) + 1;
+      }
+      gain = Math.round(gain);
+      if(gain > 0){
+        addXp(gain);
+        sess.xpGain += gain;
+        floatXp("+" + gain + " XP");
+      }
+    }
+  } else {
+    sess.streak = 0;
+  }
+  if(ok) sess.correct++;
+  sess.log.push({key:q.key, cat:q.cat, prompt:q.prompt.replace(/<[^>]+>/g, ""), ok, answer:q.answer, chosen});
 
-    const duration = (end - start) / 1000; // seconds
-    const bitsLoaded = blob.size * 8;
-    const speedBps = bitsLoaded / duration;
-    const speedMbps = speedBps / (1024 * 1024);
+  // אתגר יומי
+  if(sess.mode === "practice" || sess.mode === "boss"){
+    if(state.daily.date !== now) state.daily = {date:now, done:0, correct:0, claimed:false};
+    state.daily.done++; if(ok) state.daily.correct++;
+    const dd = state.daily;
+    if(!dd.claimed && dd.done >= 15 && dd.correct / dd.done >= 0.8){
+      dd.claimed = true;
+      state.dailyWins++;
+      addXp(50);
+      confetti(60);
+      toast("אתגר יומי הושלם! +50 XP");
+    }
+  }
+  updateCombo();
+  checkAch();
+}
 
-    return speedMbps;
+function flash(el, cls){
+  if(!el) return;
+  el.classList.remove(cls);
+  void el.offsetWidth;
+  el.classList.add(cls);
+}
+function confetti(n = 60){
+  if(!state.settings.anim) return;
+  const colors = ["#22d3ee", "#6366f1", "#fbbf24", "#22c55e", "#f43f5e", "#a5b4fc"];
+  for(let i = 0; i < n; i++){
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = (Math.random() * 100) + "vw";
+    c.style.background = pick(colors);
+    c.style.animationDuration = (1.8 + Math.random() * 1.6) + "s";
+    c.style.animationDelay = (Math.random() * 0.4) + "s";
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 4000);
+  }
+}
+function updateCombo(){
+  const el = $("combo");
+  if(!sess || sess.streak < 3){ el.classList.remove("on"); return; }
+  const mult = 1 + Math.min(sess.streak, 10) * 0.05;
+  el.textContent = "🔥 רצף " + sess.streak + " · x" + mult.toFixed(2);
+  el.classList.add("on");
+  flash(el, "hot");
+  if(sess.streak === 5 || sess.streak === 10 || sess.streak % 10 === 0){
+    toast("🔥 רצף של " + sess.streak + "!");
+    confetti(30);
+    beep(1320, 0.25);
+  }
+}
+
+function floatXp(text){
+  if(!state.settings.anim) return;
+  const el = document.createElement("div");
+  el.className = "xpfloat";
+  el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1300);
+}
+
+function useHint(){
+  if(sess.mode !== "practice" || !cur || cur.done) return;
+  if(cur.hintStage >= 3){ toast("כבר השתמשת בכל הרמזים לשאלה הזו"); return; }
+  if(hintsLeft() <= 0){
+    toast("נגמרו הרמזים לשעה זו. " + hintResetText());
+    return;
+  }
+  state.hints.push(Date.now());
+  cur.hintStage++;
+  const q = cur.q;
+  if(cur.hintStage === 1){
+    $("qctx").textContent = "רמז: " + q.ctx;
+  } else if(cur.hintStage === 2){
+    const wrongBtns = [...document.querySelectorAll("#qopts .opt")]
+      .filter((b, j) => q.options[j] !== q.answer && !b.classList.contains("elim"));
+    if(wrongBtns.length){
+      const b = pick(wrongBtns);
+      b.classList.add("elim");
+      $("qctx").textContent = "רמז: הוסרה אפשרות אחת שגויה.";
+    }
+  } else {
+    $("qctx").textContent = "רמז מלא: " + q.rule;
+  }
+  save();
+  $("hintsLeft").textContent = "רמזים זמינים: " + hintsLeft() + " / 3";
+  if(hintsLeft() === 0) toast(hintResetText());
+}
+
+function finishSession(){
+  if(sess.finished) return;
+  sess.finished = true;
+  cur = null;
+  const pct = Math.round(sess.correct / sess.total * 100);
+  const wrong = sess.log.filter(x => !x.ok);
+  let title = "סיום אימון", extra = "";
+
+  if(sess.mode === "boss"){
+    const lp = lpOf(state.currentLevel);
+    const passed = sess.correct >= 8;
+    if(passed){
+      lp.bossPassed = true;
+      state.currentLevel++;
+      title = "ניצחת את הבוס! 🏆";
+      extra = "פתחת את פרק " + state.currentLevel + ": " + (LEVEL_NAMES[state.currentLevel - 1] || "המשך מתמשך");
+      confetti(120);
+      overlay("🏆", "פרק חדש נפתח!", "עברת את אתגר הבוס עם " + sess.correct + "/10. פרק " + state.currentLevel + " נפתח.", "לפרק החדש", () => {});
+    } else {
+      title = "לא הפעם";
+      extra = "נדרשות 8 תשובות נכונות מתוך 10 כדי לעבור. התרגול ימשיך לחזק את הנקודות החלשות.";
+    }
+  }
+  if(sess.mode === "test"){
+    title = "דוח המבחן";
   }
 
-  async function measureUpload() {
-    // 1MB of data (reduce size to improve success rate)
-    const size = 1 * 1024 * 1024;
-    const data = new Uint8Array(size);
-    crypto.getRandomValues(data);
+  checkAch();
+  save();
 
-    try {
-      const start = performance.now();
-      const response = await fetch(uploadUrl, {
-        method: 'POST',
-        body: data,
-        cache: 'no-cache'
+  $("quizArea").classList.add("hidden");
+  const s = $("summary");
+  s.classList.remove("hidden");
+  const weakCats = {};
+  wrong.forEach(x => weakCats[x.cat] = (weakCats[x.cat] || 0) + 1);
+  const weakList = Object.keys(weakCats).map(c => catName(c)).join(", ");
+  s.innerHTML = `
+    <div class="card" style="text-align:center">
+      <div style="font-size:48px">${pct >= 80 ? "🌟" : pct >= 50 ? "👍" : "💪"}</div>
+      <h2>${title}</h2>
+      <p class="muted">${extra}</p>
+      <div class="grid3" style="margin:18px 0">
+        <div class="pill" style="padding:14px"><div class="muted">נכון</div><b style="font-size:24px">${sess.correct}/${sess.total}</b></div>
+        <div class="pill" style="padding:14px"><div class="muted">דיוק</div><b style="font-size:24px">${pct}%</b></div>
+        <div class="pill" style="padding:14px"><div class="muted">XP</div><b style="font-size:24px">${sess.mode === "test" ? "—" : "+" + sess.xpGain}</b></div>
+      </div>
+      ${sess.mode === "test" ? "" : ""}
+      ${wrong.length ? `<div style="text-align:right;margin-top:10px"><h3>טעויות לחזרה</h3><ul>${wrong.map(x => `<li>${x.prompt} · התשובה: <b class="en">${x.answer}</b></li>`).join("")}</ul>
+        <p class="muted">המלצה: חזור על ${weakList}. טעויות יחזרו אליך במרווחים הולכים וגדלים.</p></div>` : `<p>ללא טעויות. מצוין!</p>`}
+      <div class="row" style="justify-content:center;margin-top:18px">
+        <button class="btn primary" id="againBtn">עוד אימון</button>
+        <button class="btn" id="homeBtn">חזרה לבית</button>
+      </div>
+    </div>`;
+  if(pct >= 80) confetti(50);
+  $("againBtn").onclick = () => startSession(sess.mode === "boss" ? "practice" : sess.mode, sess.mode === "test" ? 10 : sess.total);
+  $("homeBtn").onclick = () => show("home");
+  $("sessBar").style.width = "100%";
+  sess.n = sess.total;
+}
+
+function exitSession(){
+  if(sess && !sess.finished && sess.n > 0){
+    if(!confirm("לצאת מהאימון? ההתקדמות עד כה נשמרה.")) return;
+  }
+  sess = null; cur = null;
+  show("home");
+}
+
+/* ============================================================
+   ACHIEVEMENTS
+   ============================================================ */
+/* ============================================================
+   ESSAY LESSONS (step by step, each step must pass)
+   ============================================================ */
+const ESSAY_TOPICS = [
+  "Should students wear school uniforms?",
+  "Is homework useful?",
+  "Should phones be allowed in school?",
+  "Is it good to have a pet?"
+];
+const TRANS = /^(first|second|third|another|also|moreover|in addition|finally|furthermore)/i;
+const EX_CUES = ["for example", "for instance", "such as", "because"];
+const CONC_CUES = ["in conclusion", "to sum up", "in summary", "overall", "all in all", "therefore"];
+const THESIS_CUES = ["should", "because", "although", "while", "however", "i believe", "i think", "in my opinion"];
+const parts = t => t.split(/\n\s*\n/).map(x => x.trim()).filter(Boolean);
+const sentences = t => t.split(/[.!?]+/).map(x => x.trim()).filter(Boolean);
+const wc = t => t.trim().split(/\s+/).filter(Boolean).length;
+const has = (t, arr) => { const l = t.toLowerCase(); return arr.some(w => l.includes(w)); };
+const single = t => ({ok: parts(t).length === 1, msg: "כתוב פסקה אחת בלבד, בלי שורה ריקה באמצע"});
+
+function introChecks(t){
+  const n = sentences(t).length, th = has(t, THESIS_CUES);
+  return [
+    {ok: n >= 3, msg: n >= 3 ? "יש לך לפחות 3 משפטים" : "כתוב לפחות 3 משפטים"},
+    {ok: th, msg: th ? "יש עמדה וסיבה" : "הוסף את הדעה שלך עם should או because"},
+    {ok: /[.!?]$/.test(t.trim()), msg: "סיים את הפסקה בנקודה"}
+  ];
+}
+function bodyChecks(t){
+  const st = TRANS.test(t.trim()), ex = has(t, EX_CUES), n = sentences(t).length;
+  return [
+    {ok: st, msg: st ? "הפסקה מתחילה במילת מעבר" : "התחל במילה First או Second או Another"},
+    {ok: ex, msg: ex ? "יש דוגמה או נימוק" : "הוסף דוגמה (For example) או נימוק (because)"},
+    {ok: n >= 3, msg: n >= 3 ? "יש לך לפחות 3 משפטים" : "כתוב לפחות 3 משפטים"}
+  ];
+}
+function concChecks(t){
+  const c = has(t, CONC_CUES), n = sentences(t).length;
+  return [
+    {ok: c, msg: c ? "הפסקה מסכמת" : "התחל בסיכום: In conclusion או To sum up"},
+    {ok: n >= 2, msg: n >= 2 ? "יש לך לפחות 2 משפטים" : "כתוב לפחות 2 משפטים"}
+  ];
+}
+
+const LESSONS = [
+  {id:"l1", title:"1. הפתיחה",
+   explain:`<p>הפתיחה היא הפסקה הראשונה. היא צריכה שלושה דברים:</p>
+     <ol><li>משפט שמושך את הקורא.</li><li>משפט שאומר על מה החיבור.</li><li>משפט עם <b>הדעה שלך</b> ועם <b>סיבה</b>, למשל עם <b>should</b> ו-<b>because</b>.</li></ol>`,
+   example:"Many students use their phones every day. Phones are part of school life. I think schools should not allow phones in class, because they distract students.",
+   task: topic => "כתוב פסקה אחת: פתיחה לחיבור.\nהנושא: " + topic,
+   check: t => [single(t), ...introChecks(t)]},
+  {id:"l2", title:"2. פסקת גוף",
+   explain:`<p>פסקת הגוף מסבירה סיבה אחת לדעה שלך.</p>
+     <ol><li>מתחילים במילה <b>First</b> (ראשית).</li><li>כותבים את הסיבה.</li><li>מוסיפים דוגמה עם <b>For example</b>.</li></ol>`,
+   example:"First, phones can distract students during lessons. For example, one message can make a student stop listening to the teacher. This means they miss important information.",
+   task: topic => "כתוב פסקת גוף אחת (לא פתיחה, לא סיכום).\nהנושא: " + topic,
+   check: t => [single(t), ...bodyChecks(t)]},
+  {id:"l3", title:"3. הסיכום",
+   explain:`<p>הסיכום הוא הפסקה האחרונה. מחזירים את הדעה שלך במילים אחרות.</p>
+     <ol><li>מתחילים עם <b>In conclusion</b> (לסיכום).</li><li>כותבים שוב את הדעה שלך.</li></ol>`,
+   example:"In conclusion, schools should not allow phones in class. Students learn better without distractions.",
+   task: topic => "כתוב פסקת סיכום אחת.\nהנושא: " + topic,
+   check: t => [single(t), ...concChecks(t)]},
+  {id:"l4", title:"4. חיבור מלא",
+   explain:`<p>עכשיו מחברים הכל: פתיחה, פסקת גוף, וסיכום. שלוש פסקאות, וכל אחת מופרדת בשורה ריקה.</p>`,
+   example:"Many students use their phones every day. Phones are part of school life. I think schools should not allow phones in class, because they distract students.\n\nFirst, phones can distract students during lessons. For example, one message can make a student stop listening to the teacher. This means they miss important information.\n\nIn conclusion, schools should not allow phones in class. Students learn better without distractions.",
+   task: topic => "כתוב חיבור שלם: 3 פסקאות (פתיחה, גוף, סיכום).\nהנושא: " + topic,
+   check: t => {
+     const p = parts(t);
+     return [
+       {ok: p.length === 3, msg: p.length === 3 ? "יש 3 פסקאות" : "כתוב בדיוק 3 פסקאות: פתיחה, גוף וסיכום (מופרדות בשורה ריקה)"},
+       ...introChecks(p[0] || ""), ...bodyChecks(p[1] || ""), ...concChecks(p[2] || "")
+     ];
+   }}
+];
+
+let essayCur = null;
+let courseCur = null;
+
+const esc = t => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const hl = text => esc(text)
+  .replace(/\b(First|Second|Third|Finally|Another|Also|Moreover|However|For example|For instance|In conclusion|To sum up|In summary|Therefore)\b/gi, m => '<span class="c-conn">' + m + '</span>')
+  .replace(/\b(should|because|I think|I believe|In my opinion)\b/gi, m => '<span class="c-cue">' + m + '</span>');
+
+const COURSE_UNITS = [
+  {id:"u1", title:"1. משפט מלא",
+   teach:`<p>כל משפט באנגלית צריך לפחות שני דברים:</p>
+     <div class="tip"><span class="c-subj">מי עושה?</span> (נושא) למשל: <b>I</b>, <b>she</b>, <b>the cat</b></div>
+     <div class="tip"><span class="c-verb">מה הוא עושה?</span> (פועל) למשל: <b>like</b>, <b>reads</b>, <b>sleeps</b></div>
+     <div class="rule"><b>כללי כתיבה:</b> אות גדולה בתחילת המשפט, ונקודה (.) בסופו.</div>`,
+   example:"I like dogs.\nShe reads books.\nThe cat sleeps.",
+   quiz:[
+     {ins:"בחר את המשפט שכתוב נכון (אות גדולה בהתחלה ונקודה בסוף)", q:"", o:["i like dogs.","I like dogs.","I like dogs","I Like Dogs."], a:"I like dogs.", why:"משפט מתחיל באות גדולה ומסתיים בנקודה."},
+     {ins:"איזה משפט מכיל <b>מי עושה</b> ו<b>מה עושה</b>?", q:"", o:["Happy in the park.","The cat sleeps.","Very big.","Under the table."], a:"The cat sleeps.", why:"<b>The cat</b> = מי, <b>sleeps</b> = מה הוא עושה. לשאר האפשרויות אין פועל."},
+     {ins:"באיזה סימן מסיימים משפט רגיל?", q:"", o:[",","-",".","'"], a:".", why:"משפט רגיל מסתיים בנקודה (.)."}
+   ]},
+  {id:"u2", title:"2. מילים שחייבים להכיר",
+   teach:`<p>אלה המילים שתצטרך כדי לכתוב חיבור:</p>
+     <div class="tip"><b>opinion</b> = דעה &nbsp;|&nbsp; <b>topic</b> = נושא &nbsp;|&nbsp; <b>reason</b> = סיבה</div>
+     <div class="tip"><b>example</b> = דוגמה &nbsp;|&nbsp; <b>agree</b> = להסכים &nbsp;|&nbsp; <b>disagree</b> = לא להסכים</div>
+     <div class="tip"><b>conclusion</b> = סיכום (החלק האחרון בחיבור)</div>`,
+   example:"My opinion is that homework is useful.\nI agree with my friend.\nHere is one example.",
+   quiz:[
+     {ins:"מה פירוש המילה <b>opinion</b>?", q:"", o:["דעה","עובדה","שאלה","סיפור"], a:"דעה", why:"opinion = דעה."},
+     {ins:"מה פירוש המילה <b>disagree</b>?", q:"", o:["להסכים","לא להסכים","לשאול","לזכור"], a:"לא להסכים", why:"disagree = לא להסכים. ההפך מ-agree (להסכים)."},
+     {ins:"מה פירוש המילה <b>conclusion</b>?", q:"", o:["סיכום","נושא","דוגמה","סיבה"], a:"סיכום", why:"conclusion = סיכום. זו הפסקה האחרונה בחיבור."}
+   ]},
+  {id:"u3", title:"3. מילות קישור",
+   teach:`<p>מילות קישור מחברות בין המשפטים והפסקאות:</p>
+     <div class="tip"><span class="c-conn">First</span> = ראשית &nbsp;|&nbsp; <span class="c-conn">Second</span> = שנית &nbsp;|&nbsp; <span class="c-conn">Finally</span> = לבסוף</div>
+     <div class="tip"><span class="c-conn">For example</span> = לדוגמה &nbsp;|&nbsp; <span class="c-conn">However</span> = אולם</div>
+     <div class="tip"><span class="c-conn">In conclusion</span> = לסיכום</div>`,
+   example:"First, reading helps me learn.\nFor example, I read every day.\nIn conclusion, reading is important.",
+   quiz:[
+     {ins:"איזו מילה פותחת את <b>הנקודה הראשונה</b>?", q:"", o:["First","Finally","However","In conclusion"], a:"First", why:"First = ראשית. מתחילים בה את הנקודה הראשונה."},
+     {ins:"איזו מילה פותחת את <b>הסיכום</b>?", q:"", o:["First","For example","In conclusion","Because"], a:"In conclusion", why:"In conclusion = לסיכום."},
+     {ins:"השלם את המשפט במילה מתאימה: המילה צריכה לתת <b>סיבה</b>", q:"My dog is happy ___ it gets a lot of food.", o:["because","however","finally","first"], a:"because", why:"because = כי. המילה נותנת את הסיבה לשמחה של הכלב."}
+   ]},
+  {id:"u4", title:"4. פסקה: רעיון אחד",
+   teach:`<p><b>פסקה</b> = כמה משפטים על <b>רעיון אחד</b>.</p>
+     <div class="rule">אם משפט לא מדבר על הרעיון של הפסקה, הוא לא שייך אליה.</div>
+     <p>סדר החיבור: <b>פתיחה</b> (Introduction), אחר כך <b>גוף</b> (Body), ובסוף <b>סיכום</b> (Conclusion).</p>`,
+   example:"Dogs are loyal friends. They can play and walk with us. Dogs need daily exercise.",
+   quiz:[
+     {ins:"איזה משפט <b>לא</b> שייך לפסקה על כלבים?", q:"", o:["Dogs are loyal friends.","They can play fetch.","I like to eat pizza.","Dogs need daily walks."], a:"I like to eat pizza.", why:"המשפט הזה מדבר על פיצה, ולא על כלבים."},
+     {ins:"איזו פסקה <b>מערבבת</b> כמה נושאים שונים?", q:"", o:["Uniforms look neat. They can reduce pressure. Students may save money.","Pizza is tasty. Monday is cold. The bus is late.","Rain is wet. It falls from clouds. Rain helps plants grow."], a:"Pizza is tasty. Monday is cold. The bus is late.", why:"כאן יש פיצה, יום שני והאוטובוס, שלושה נושאים שונים."},
+     {ins:"מה הסדר הנכון של חיבור?", q:"", o:["Conclusion, Introduction, Body","Introduction, Body, Conclusion","Body, Conclusion, Introduction","Body, Introduction, Conclusion"], a:"Introduction, Body, Conclusion", why:"קודם פתיחה, אחר כך גוף, ובסוף סיכום."}
+   ]},
+  {id:"u5", title:"5. דעה וסיבה",
+   teach:`<div class="tip"><span class="c-cue">I think / I believe / In my opinion</span> = זו הדעה שלי</div>
+     <div class="tip"><span class="c-cue">should</span> = צריך. אחריו פועל בצורת הבסיס: <b>should wear</b></div>
+     <div class="tip"><span class="c-cue">because</span> = כי. מביא את הסיבה.</div>`,
+   example:"I think students should wear uniforms, because they look equal.\nIn my opinion, phones should be off in class.",
+   quiz:[
+     {ins:"השלם את המילה שמביעה <b>המלצה</b> (צריך)", q:"I think students ___ wear uniforms.", o:["should","to","is","was"], a:"should", why:"should = צריך. זו המילה שמביעה המלצה."},
+     {ins:"איזו מילה מביאה <b>סיבה</b>?", q:"", o:["because","but","maybe","always"], a:"because", why:"because = כי. היא מביאה את הסיבה."},
+     {ins:"איזה משפט מביע <b>דעה</b> (ולא עובדה)?", q:"", o:["The sun is hot.","I believe homework is useful.","Water is wet.","Today is Monday."], a:"I believe homework is useful.", why:"I believe = אני מאמין. זו דעה, לא עובדה."}
+   ]},
+  {id:"u6", title:"6. הווה: she plays",
+   teach:`<div class="tip"><b>I / you / we / they</b> + פועל רגיל: I <span class="c-verb">play</span></div>
+     <div class="tip"><b>he / she / it</b> + פועל + <b>s</b>: she <span class="c-verb">plays</span></div>`,
+   example:"I play football.\nShe plays the piano.\nThey read books.",
+   quiz:[
+     {ins:"השלם עם <b>she</b> (הפועל go = ללכת)", q:"She ___ to school every day.", o:["go","goes","going","gone"], a:"goes", why:"she = he / she / it, לכן מוסיפים s: goes."},
+     {ins:"השלם עם <b>they</b> (הפועל play = לשחק)", q:"They ___ football on Sundays.", o:["plays","play","playing","played"], a:"play", why:"they = לא מוסיפים s: play."},
+     {ins:"השלם עם <b>he</b> (הפועל read = לקרוא)", q:"He ___ books every week.", o:["read","reads","reading","readed"], a:"reads", why:"he = מוסיפים s: reads."}
+   ]}
+];
+
+const basicsDone = () => COURSE_UNITS.every(u => state.essay.basics[u.id]) && !!state.essay.basics.final;
+
+function runQuiz(items, onPass){
+  const box = $("essayQuiz");
+  box.classList.remove("hidden");
+  const picks = items.map(() => null);
+  const orders = items.map(it => shuffle(it.o));
+  let fb = "";
+  const draw = () => {
+    box.innerHTML = "";
+    if(fb){
+      const f = document.createElement("div");
+      f.innerHTML = fb;
+      box.appendChild(f);
+    }
+    items.forEach((it, i) => {
+      const wrap = document.createElement("div");
+      wrap.className = "qblock";
+      wrap.innerHTML = `<div class="qhead">שאלה ${i + 1} מתוך ${items.length}</div>
+        <div class="qins">${it.ins}</div>` + (it.q ? `<div class="qeng" dir="ltr">${esc(it.q)}</div>` : "");
+      const grid = document.createElement("div");
+      grid.className = "qopts";
+      orders[i].forEach(opt => {
+        const b = document.createElement("button");
+        b.className = "qopt" + (picks[i] === opt ? " on" : "");
+        b.dir = /[A-Za-z]/.test(opt) ? "ltr" : "rtl";
+        b.textContent = opt;
+        b.onclick = () => { picks[i] = opt; fb = ""; draw(); };
+        grid.appendChild(b);
       });
-      await response.text();
-      const end = performance.now();
+      wrap.appendChild(grid);
+      box.appendChild(wrap);
+    });
+    const go = document.createElement("button");
+    go.className = "btn primary";
+    go.textContent = "בדוק";
+    go.onclick = () => {
+      if(picks.some(p => p === null)){ toast("ענה על כל השאלות לפני הבדיקה"); return; }
+      const bad = items.map((it, i) => picks[i] === it.a ? -1 : i).filter(i => i >= 0);
+      if(bad.length === 0){ fb = ""; onPass(); return; }
+      fb = '<div class="fb bad"><b>עוד לא בדיוק.</b> התשובות השגויות מסומנות למטה. תקרא את ההסבר ונסה שוב.</div>' +
+        bad.map(i => `<div class="fb bad">✘ ${items[i].ins}${items[i].q ? " <span dir=\"ltr\">" + esc(items[i].q) + "</span>" : ""}<br>התשובה הנכונה: <b dir="ltr">${esc(items[i].a)}</b>. ${items[i].why}</div>`).join("");
+      bad.forEach(i => { picks[i] = null; orders[i] = shuffle(items[i].o); });
+      draw();
+    };
+    box.appendChild(go);
+  };
+  draw();
+}
 
-      const duration = (end - start) / 1000; // seconds
-      const bitsUploaded = size * 8;
-      const speedBps = bitsUploaded / duration;
-      const speedMbps = speedBps / (1024 * 1024);
+function renderCourseList(){
+  const box = $("essayCourse");
+  box.classList.remove("hidden");
+  box.innerHTML = '<h2>שלב א׳: יסודות הכתיבה</h2><p class="muted">לפני שבוחרים נושא, עוברים על היסודות. בכל יחידה לומדים, ואז עונים על שאלות. צריך לענות נכון על הכול כדי להמשיך.</p>';
+  COURSE_UNITS.forEach((u, i) => {
+    const done = !!state.essay.basics[u.id];
+    const unlocked = i === 0 || !!state.essay.basics[COURSE_UNITS[i - 1].id];
+    const b = document.createElement("button");
+    b.className = "chapter" + (done ? " done" : "") + (unlocked ? "" : " locked");
+    b.disabled = !unlocked;
+    b.innerHTML = `<div class="num">${done ? "✓" : (unlocked ? i + 1 : "🔒")}</div>
+      <div class="info"><h3>${u.title}</h3><div class="muted">${done ? "הושלם" : (unlocked ? "לחץ כדי ללמוד" : "נפתח אחרי היחידה הקודמת")}</div></div>`;
+    if(unlocked) b.onclick = () => { courseCur = u; renderEssay(); };
+    box.appendChild(b);
+  });
+  const allUnits = COURSE_UNITS.every(u => state.essay.basics[u.id]);
+  const fin = document.createElement("button");
+  fin.className = "btn primary";
+  fin.textContent = "מבחן כניסה לכתיבה";
+  fin.disabled = !allUnits;
+  fin.onclick = () => { courseCur = "final"; renderEssay(); };
+  box.appendChild(fin);
+}
 
-      return speedMbps;
-    } catch (e) {
-      return 0;  // Upload might fail due to CORS; show 0 Mbps then
-    }
+function renderCourseLesson(c){
+  $("essayCourse").classList.add("hidden");
+  $("essayTopicCard").classList.add("hidden");
+  $("essayList").innerHTML = "";
+  $("essayLesson").classList.remove("hidden");
+  $("essayStart").classList.add("hidden");
+  $("essayWriteCard").classList.add("hidden");
+  if(c === "final"){
+    $("essayExplain").innerHTML = '<h2>מבחן כניסה לכתיבה</h2><p>10 שאלות מכל היחידות. צריך לענות נכון על כולן כדי להמשיך לנושאים.</p>';
+    $("essayExampleCard").classList.add("hidden");
+    const pool = COURSE_UNITS.flatMap(u => u.quiz);
+    runQuiz(shuffle(pool).slice(0, 10), () => {
+      state.essay.basics.final = true;
+      addXp(50);
+      save();
+      confetti(80);
+      toast("עברת את מבחן הכניסה! 🎉");
+      courseCur = null;
+      renderEssay();
+    });
+  } else {
+    $("essayExplain").innerHTML = `<h2>${c.title}</h2>${c.teach}`;
+    $("essayExample").innerHTML = hl(c.example);
+    $("essayExampleCard").classList.remove("hidden");
+    runQuiz(c.quiz, () => {
+      state.essay.basics[c.id] = true;
+      addXp(20);
+      save();
+      confetti(40);
+      toast("היחידה הושלמה!");
+      courseCur = null;
+      renderEssay();
+    });
   }
+}
 
-  startBtn.addEventListener('click', async () => {
-    startBtn.disabled = true;
-    startBtn.textContent = 'Testing...';
+function renderEssay(){
+  if(!basicsDone()){
+    $("essayTopicCard").classList.add("hidden");
+    $("essayList").innerHTML = "";
+    if(courseCur){ renderCourseLesson(courseCur); return; }
+    $("essayLesson").classList.add("hidden");
+    $("essayQuiz").classList.add("hidden");
+    renderCourseList();
+    return;
+  }
+  $("essayCourse").classList.add("hidden");
+  $("essayExampleCard").classList.remove("hidden");
+  $("essayQuiz").classList.add("hidden");
+  $("essayTopicCard").classList.toggle("hidden", !!essayCur);
+  const topic = state.essay.topic;
+  const tw = $("essayTopics");
+  tw.innerHTML = "";
+  ESSAY_TOPICS.forEach(t => {
+    const b = document.createElement("button");
+    b.className = "btn small" + (t === topic ? " primary" : "");
+    b.textContent = t;
+    b.onclick = () => { state.essay.topic = t; save(); essayCur = null; renderEssay(); };
+    tw.appendChild(b);
+  });
+  $("essayTopicCard").classList.toggle("hidden", !!essayCur);
 
-    downloadSpan.textContent = '0';
-    uploadSpan.textContent = '0';
-    pingSpan.textContent = '0';
+  const list = $("essayList");
+  list.innerHTML = "";
+  if(essayCur){
+    $("essayLesson").classList.remove("hidden");
+    $("essayExplain").innerHTML = `<h2>${essayCur.title}</h2>${essayCur.explain}`;
+    $("essayExample").innerHTML = hl(essayCur.example);
+    $("essayTask").textContent = essayCur.task(topic || "");
+    $("essayText").value = state.essay.drafts[essayCur.id] || "";
+    $("essayCount").textContent = wc($("essayText").value) + " מילים";
+    $("essayFeedback").innerHTML = "";
+    return;
+  }
+  $("essayLesson").classList.add("hidden");
+  if(!topic){
+    list.innerHTML = '<p class="muted">בחר נושא למעלה כדי להתחיל.</p>';
+    return;
+  }
+  LESSONS.forEach((L, i) => {
+    const done = !!state.essay.done[L.id];
+    const unlocked = i === 0 || !!state.essay.done[LESSONS[i - 1].id];
+    const b = document.createElement("button");
+    b.className = "chapter" + (done ? " done" : "") + (unlocked ? "" : " locked");
+    b.disabled = !unlocked;
+    b.innerHTML = `<div class="num">${done ? "✓" : (unlocked ? i + 1 : "🔒")}</div>
+      <div class="info"><h3>${L.title}</h3><div class="muted">${done ? "הושלם" : (unlocked ? "לחץ כדי ללמוד ולכתוב" : "נפתח אחרי השיעור הקודם")}</div></div>`;
+    if(unlocked) b.onclick = () => openLesson(L);
+    list.appendChild(b);
+  });
+  if(LESSONS.every(L => state.essay.done[L.id])){
+    const d = document.createElement("div");
+    d.className = "card";
+    d.innerHTML = '<h3>🎉 סיימת את כל השיעורים!</h3><p class="muted">אפשר לבחור נושא אחר ולכתוב חיבור חדש.</p>';
+    list.appendChild(d);
+  }
+}
 
-    try {
-      const ping = await measurePing();
-      pingSpan.textContent = ping.toFixed(0);
+function openLesson(L){
+  essayCur = L;
+  $("essayWriteCard").classList.add("hidden");
+  $("essayStart").classList.remove("hidden");
+  renderEssay();
+  window.scrollTo(0, 0);
+}
 
-      const download = await measureDownload();
-      downloadSpan.textContent = download.toFixed(1);
+function checkEssay(){
+  if(!essayCur) return;
+  const t = $("essayText").value;
+  const res = essayCur.check(t);
+  const pass = res.every(r => r.ok);
+  let html = res.map(r => `<div class="fb ${r.ok ? "ok" : "bad"}">${r.ok ? "✔" : "✘"} ${r.msg}</div>`).join("");
+  state.essay.drafts[essayCur.id] = t;
+  const box = $("essayFeedback");
+  if(!pass){
+    box.innerHTML = html + '<p class="muted">עוד לא עברת. תקן את הנקודות האדומות. אפשר לחזור לדוגמה למעלה.</p>';
+    save();
+    return;
+  }
+  const wasDone = !!state.essay.done[essayCur.id];
+  state.essay.done[essayCur.id] = true;
+  save();
+  if(!wasDone){ addXp(30); confetti(60); }
+  checkAch();
+  box.innerHTML = html + '<div class="fb ok">🎉 מעולה! השיעור הושלם.</div>';
+  const nextIdx = LESSONS.indexOf(essayCur) + 1;
+  const btn = document.createElement("button");
+  btn.className = "btn primary";
+  btn.textContent = nextIdx < LESSONS.length ? "לשיעור הבא ←" : "לרשימת השיעורים";
+  btn.onclick = () => { essayCur = null; renderEssay(); };
+  box.appendChild(btn);
+}
 
-      const upload = await measureUpload();
-      uploadSpan.textContent = upload.toFixed(1);
+/* ============================================================
+   BAGRUT SIMULATION
+   ============================================================ */
+const BAGRUT_CFG = {
+  3:{vocab:10, grammar:6,  passages:1, minutes:90,
+     prompt:"כתוב פסקה אחת: פתיחה עם דעה וסיבה, לפחות 3 משפטים.",
+     check: t => introChecks(t)},
+  4:{vocab:15, grammar:8,  passages:2, minutes:120,
+     prompt:"כתוב חיבור של 3 פסקאות: פתיחה, גוף וסיכום.",
+     check: t => LESSONS[3].check(t)},
+  5:{vocab:20, grammar:10, passages:3, minutes:150,
+     prompt:"כתוב חיבור מלא של לפחות 150 מילים: 3 פסקאות.",
+     check: t => [...LESSONS[3].check(t), {ok: wc(t) >= 150, msg: wc(t) >= 150 ? "אורך מספיק" : "כתוב לפחות 150 מילים, כרגע יש " + wc(t)}]}
+};
+const BAGRUT_PASSAGES = [
+  {title:"A New Bike", text:"Maya got a new bike for her birthday. It is red and very fast. Every morning she rides it to school with her friend Noa. On rainy days, they take the bus instead. Maya wants to ride in the city race next month.",
+   qs:[
+     {q:"What did Maya get for her birthday?", o:["a new bike","a book","a phone","a dog"], a:"a new bike"},
+     {q:"Who does Maya ride to school with?", o:["her brother","Noa","her mother","nobody"], a:"Noa"},
+     {q:"What do they do on rainy days?", o:["ride bikes","take the bus","stay at home","walk"], a:"take the bus"},
+     {q:"What does Maya want to do next month?", o:["move house","ride in a race","buy a car","visit Paris"], a:"ride in a race"}
+   ]},
+  {title:"The School Library", text:"The school library opened a new reading room last week. It has soft chairs, large windows, and quiet corners for studying. Students can borrow up to five books for two weeks. A late book costs one shekel per day. The library is open from 8 a.m. to 4 p.m. on school days.",
+   qs:[
+     {q:"What opened last week?", o:["a cafe","a reading room","a gym","a parking lot"], a:"a reading room"},
+     {q:"How many books can a student borrow?", o:["two","five","ten","one"], a:"five"},
+     {q:"How much does a late book cost per day?", o:["one shekel","five shekels","nothing","two shekels"], a:"one shekel"},
+     {q:"When is the library open?", o:["8 a.m. to 4 p.m. on school days","all day","until 10 p.m.","weekends only"], a:"8 a.m. to 4 p.m. on school days"}
+   ]},
+  {title:"Saving Water", text:"Water is becoming a precious resource in many countries. Small habits can save a lot of it. For example, closing the tap while brushing teeth can save several liters each time. Fixing a leaking tap is also important, because a small drip can waste thousands of liters a year. Schools can help by teaching children these habits early.",
+   qs:[
+     {q:"What is the main idea of the text?", o:["water is cheap","small habits can save water","taps are expensive","children do not brush"], a:"small habits can save water"},
+     {q:"What is one example of saving water?", o:["washing the car every day","closing the tap while brushing teeth","drinking more water","watering plants at noon"], a:"closing the tap while brushing teeth"},
+     {q:"Why is fixing a leaking tap important?", o:["it looks nice","a small drip can waste a lot of water","it is cheap","it stops the noise"], a:"a small drip can waste a lot of water"},
+     {q:"According to the text, what can schools do?", o:["build swimming pools","teach children these habits early","sell water","close all the taps"], a:"teach children these habits early"}
+   ]}
+];
+const BG_WHY = "התשובה מופיעה בטקסט. קרא שוב את המשפט הרלוונטי.";
 
-    } catch (e) {
-      alert('Error running speed test: ' + e.message);
-    } finally {
-      startBtn.disabled = false;
-      startBtn.textContent = 'Start Test';
+let exam = null;
+let examTimer = null;
+
+function startBagrut(units){
+  const cfg = BAGRUT_CFG[units];
+  const items = [];
+  shuffle(WORDS.filter(w => w.lvl <= units)).slice(0, cfg.vocab).forEach((w, i) => items.push({
+    k:"v" + i, sec:"vocab", q:`מה פירוש המילה <span class="en">${w.en}</span>?`,
+    o: opts(w.he, WORDS.filter(x => x.lvl === w.lvl && x.en !== w.en).map(x => x.he)), a:w.he, why:`${w.en} = ${w.he}`}));
+  shuffle(GRAMMAR.filter(g => g.lvl <= units)).slice(0, cfg.grammar).forEach((g, i) => items.push({
+    k:"g" + i, sec:"grammar", q:g.p.replace("___", '<span class="blank">___</span>'), o:shuffle(g.o), a:g.a, why:g.r}));
+  const passages = BAGRUT_PASSAGES.slice(0, cfg.passages);
+  passages.forEach((ps, pi) => ps.qs.forEach((qq, qi) => items.push({
+    k:`p${pi}-${qi}`, sec:"reading", passage:pi, q:qq.q, o:shuffle(qq.o), a:qq.a, why:BG_WHY})));
+  exam = {units, cfg, items, passages, essay:{prompt:cfg.prompt, topic:pick(ESSAY_TOPICS), check:cfg.check},
+          answers:{}, essayText:"", endAt: Date.now() + cfg.minutes * 60000, done:false};
+  if(examTimer) clearInterval(examTimer);
+  examTimer = setInterval(tickExam, 1000);
+  renderBagrut();
+  window.scrollTo(0, 0);
+}
+
+function tickExam(){
+  if(!exam || exam.done) return;
+  const ms = exam.endAt - Date.now();
+  if(ms <= 0){
+    $("bgTimer").textContent = "00:00";
+    submitExam(true);
+    return;
+  }
+  const m = Math.floor(ms / 60000), sec = Math.floor((ms % 60000) / 1000);
+  $("bgTimer").textContent = String(m).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
+}
+
+function qBlock(it, n, total){
+  const wrap = document.createElement("div");
+  wrap.className = "qblock";
+  wrap.innerHTML = `<div class="qhead">שאלה ${n} מתוך ${total}</div><div class="qins">${it.q}</div>`;
+  const grid = document.createElement("div");
+  grid.className = "qopts";
+  it.o.forEach(opt => {
+    const b = document.createElement("button");
+    b.className = "qopt" + (exam.answers[it.k] === opt ? " on" : "");
+    b.dir = /[A-Za-z]/.test(opt) ? "ltr" : "rtl";
+    b.textContent = opt;
+    b.onclick = () => {
+      exam.answers[it.k] = opt;
+      grid.querySelectorAll(".qopt").forEach(x => x.classList.toggle("on", x === b));
+    };
+    grid.appendChild(b);
+  });
+  wrap.appendChild(grid);
+  return wrap;
+}
+
+function renderExamBody(){
+  const body = $("bgBody");
+  body.innerHTML = "";
+  $("bgUnits").textContent = exam.units + " יחידות";
+  const vocab = exam.items.filter(x => x.sec === "vocab");
+  const gram = exam.items.filter(x => x.sec === "grammar");
+  const sectionHead = t => { const h = document.createElement("h2"); h.className = "sec-h"; h.textContent = t; body.appendChild(h); };
+
+  sectionHead("חלק א׳: אוצר מילים");
+  vocab.forEach((it, i) => body.appendChild(qBlock(it, i + 1, vocab.length)));
+
+  sectionHead("חלק ב׳: דקדוק");
+  gram.forEach((it, i) => body.appendChild(qBlock(it, i + 1, gram.length)));
+
+  sectionHead("חלק ג׳: הבנת הנקרא");
+  exam.passages.forEach((ps, pi) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `<h3>${ps.title}</h3><p class="passage">${esc(ps.text)}</p>`;
+    body.appendChild(card);
+    const qs = exam.items.filter(x => x.sec === "reading" && x.passage === pi);
+    qs.forEach((it, i) => body.appendChild(qBlock(it, i + 1, qs.length)));
+  });
+
+  sectionHead("חלק ד׳: כתיבה");
+  const w = document.createElement("div");
+  w.className = "card";
+  w.innerHTML = `<h3>${exam.essay.prompt}</h3><p class="muted">נושא: ${esc(exam.essay.topic)}</p>
+    <textarea id="bgWriting" class="essay-box" rows="12" aria-label="Essay"></textarea>
+    <p class="muted" id="bgWc"></p>`;
+  body.appendChild(w);
+  const ta = $("bgWriting");
+  ta.value = exam.essayText;
+  $("bgWc").textContent = wc(exam.essayText) + " מילים";
+  ta.oninput = () => {
+    exam.essayText = ta.value;
+    $("bgWc").textContent = wc(ta.value) + " מילים";
+  };
+}
+
+function renderBagrutSetup(){
+  const box = $("bgSetup");
+  box.innerHTML = '<div class="grid3"></div><div id="bgHistory"></div>';
+  const g = box.querySelector(".grid3");
+  [3, 4, 5].forEach(u => {
+    const c = BAGRUT_CFG[u];
+    const b = document.createElement("button");
+    b.className = "mode";
+    b.innerHTML = `<b>${u} יחידות</b><small>${c.vocab + c.grammar + c.passages * 4} שאלות + כתיבה<br>זמן: ${c.minutes} דקות</small>`;
+    b.onclick = () => startBagrut(u);
+    g.appendChild(b);
+  });
+  const hist = $("bgHistory");
+  const rs = state.bagrut.results;
+  if(rs.length){
+    hist.innerHTML = '<div class="card"><h3>הציונים שלך</h3></div>';
+    const card = hist.querySelector(".card");
+    rs.forEach(r => {
+      const p = document.createElement("div");
+      p.className = "muted";
+      p.textContent = r.date + " · " + r.units + " יחידות · ציון " + r.score;
+      card.appendChild(p);
+    });
+  }
+}
+
+function renderBagrut(){
+  $("bgResult").classList.add("hidden");
+  if(exam && !exam.done){
+    $("bgSetup").innerHTML = "";
+    $("bgExam").classList.remove("hidden");
+    renderExamBody();
+    return;
+  }
+  $("bgExam").classList.add("hidden");
+  renderBagrutSetup();
+}
+
+function submitExam(auto){
+  if(!exam || exam.done) return;
+  exam.done = true;
+  if(examTimer){ clearInterval(examTimer); examTimer = null; }
+
+  const pctOf = sec => {
+    const it = exam.items.filter(x => x.sec === sec);
+    if(!it.length) return 0;
+    return Math.round(it.filter(x => exam.answers[x.k] === x.a).length / it.length * 100);
+  };
+  const vPct = pctOf("vocab"), gPct = pctOf("grammar"), rPct = pctOf("reading");
+  const checks = exam.essay.check(exam.essayText || "");
+  const wPct = Math.round(checks.filter(c => c.ok).length / checks.length * 100);
+  const score = Math.round(vPct * 0.2 + gPct * 0.2 + rPct * 0.25 + wPct * 0.35);
+  const band = score >= 90 ? "מצוין" : score >= 75 ? "טוב מאוד" : score >= 60 ? "עבר" : "לא עבר";
+  const weakest = [["אוצר מילים", vPct], ["דקדוק", gPct], ["הבנת הנקרא", rPct], ["כתיבה", wPct]].sort((a, b) => a[1] - b[1])[0];
+
+  state.bagrut.results.unshift({units: exam.units, score, date: todayStr()});
+  state.bagrut.results = state.bagrut.results.slice(0, 10);
+  save();
+  checkAch();
+
+  const wrong = exam.items.filter(x => exam.answers[x.k] !== x.a);
+  const wrongHtml = wrong.length
+    ? wrong.map(x => `<div class="fb bad">${x.q} <br>התשובה הנכונה: <b dir="ltr">${esc(x.a)}</b>. ${x.why}</div>`).join("")
+    : '<div class="fb ok">אין טעויות בחלקים הסגורים. מצוין!</div>';
+  const writingHtml = checks.map(c => `<div class="fb ${c.ok ? "ok" : "bad"}">${c.ok ? "✔" : "✘"} ${c.msg}</div>`).join("");
+
+  $("bgExam").classList.add("hidden");
+  const r = $("bgResult");
+  r.classList.remove("hidden");
+  r.innerHTML = `
+    <div class="card bgcard" style="text-align:center">
+      <div class="muted">${auto ? "הזמן נגמר, המבחן הוגש אוטומטית" : "המבחן הוגש"}</div>
+      <b>הציון שלך: ${score}</b>
+      <p><b>${band}</b> · ${exam.units} יחידות</p>
+      <div class="grid3" style="margin:14px 0">
+        <div class="pill" style="padding:12px"><div class="muted">אוצר מילים</div><b>${vPct}%</b></div>
+        <div class="pill" style="padding:12px"><div class="muted">דקדוק</div><b>${gPct}%</b></div>
+        <div class="pill" style="padding:12px"><div class="muted">הבנת הנקרא</div><b>${rPct}%</b></div>
+      </div>
+      <div class="pill" style="padding:12px"><div class="muted">כתיבה</div><b>${wPct}%</b></div>
+      <p class="muted" style="margin-top:12px">החלק החלש ביותר: <b>${weakest[0]}</b>. כדאי לחזור עליו בתרגול.</p>
+    </div>
+    <div class="card"><h3>משוב על הכתיבה</h3>${writingHtml}</div>
+    <div class="card"><h3>טעויות והסברים (${wrong.length})</h3>${wrongHtml}</div>
+    <div class="row"><button class="btn primary" id="bgAgain">מבחן חדש</button><button class="btn" id="bgHome">חזרה לבית</button></div>`;
+  $("bgAgain").onclick = () => { exam = null; renderBagrut(); };
+  $("bgHome").onclick = () => { exam = null; show("home"); };
+  window.scrollTo(0, 0);
+}
+
+const ACH = [
+  {id:"first", t:"התשובה הראשונה", d:"ענית על שאלה ראשונה", ic:"🌱", c:s => s.answered >= 1},
+  {id:"s5", t:"רצף של 5", d:"5 תשובות נכונות ברצף", ic:"🔥", c:s => s.bestStreak >= 5},
+  {id:"s20", t:"רצף של 20", d:"20 תשובות נכונות ברצף", ic:"⚡", c:s => s.bestStreak >= 20},
+  {id:"a100", t:"מאה תשובות", d:"100 תשובות בסך הכל", ic:"💯", c:s => s.answered >= 100},
+  {id:"d3", t:"שלושה ימים", d:"3 ימי למידה ברצף", ic:"📅", c:s => s.streakDays >= 3},
+  {id:"d7", t:"שבוע של למידה", d:"7 ימי למידה ברצף", ic:"🗓️", c:s => s.streakDays >= 7},
+  {id:"boss", t:"הבוס הראשון", d:"ניצחת אתגר בוס", ic:"🏆", c:s => Object.values(s.lp).some(x => x.bossPassed)},
+  {id:"ch5", t:"מעבר לפרק 5", d:"הגעת לפרק 6 ומעלה", ic:"🗺️", c:s => s.currentLevel >= 6},
+  {id:"mast", t:"שלטת בטעות", d:"טעות נשלטה לאחר חזרות מרווחות", ic:"🎯", c:s => s.masteredCount >= 1},
+  {id:"daily", t:"אתגר יומי", d:"השלמת את האתגר היומי", ic:"⭐", c:s => s.dailyWins >= 1}
+];
+function checkAch(){
+  ACH.forEach(a => {
+    if(!state.ach[a.id] && a.c(state)){
+      state.ach[a.id] = true;
+      toast("הישג חדש: " + a.t + " " + a.ic);
     }
   });
-</script>
+}
 
+/* ============================================================
+   RENDER
+   ============================================================ */
+function renderHome(){
+  const xp = state.xp, r = rankOf(xp);
+  const lo = thresholdFor(r), hi = thresholdFor(r + 1);
+  const pct = Math.min(100, Math.round((xp - lo) / (hi - lo) * 100));
+  $("rankNum").textContent = r;
+  $("rankRing").style.setProperty("--p", pct + "%");
+  $("rankTitle").textContent = titleOf(r);
+  $("xpBar").style.width = pct + "%";
+  $("xpText").textContent = xp + " XP · הבא ב-" + (hi - xp) + " XP";
+  $("streakDays").textContent = state.streakDays;
+  $("curChapter").textContent = state.currentLevel;
+  $("mistakeCount").textContent = Object.keys(state.mistakes).length;
+  const lp = lpOf(state.currentLevel);
+  const need = Math.max(0, 15 - lp.c);
+  $("continueText").textContent = need > 0
+    ? "עוד " + need + " תשובות נכונות ופותחים את אתגר הבוס של פרק " + state.currentLevel + " ⚔️"
+    : (bossAvailable() ? "אתגר הבוס מחכה לך! ⚔️" : "המשך לשלוט בפרק " + state.currentLevel + " · דיוק אחרון " + Math.round(recentAcc(lp) * 100) + "%");
+  const d = state.daily.date === todayStr() ? state.daily : {done:0, correct:0};
+  const dp = Math.min(100, Math.round(d.done / 15 * 100));
+  $("dailyBar").style.width = dp + "%";
+  $("dailyText").textContent = d.done + " / 15 שאלות · " + (d.done ? Math.round(d.correct / d.done * 100) : 0) + "% דיוק";
+  $("bossBtn").disabled = !bossAvailable();
+  $("bossText").textContent = bossAvailable() ? "מוכן! 10 שאלות, נדרשות 8 נכונות" : "נפתח לאחר שליטה בפרק";
+  const h = hintsLeft();
+  $("hintInfo").textContent = "רמזים זמינים: " + h + " / 3" + (h < 3 ? " · " + hintResetText() : "");
+}
+
+function renderMap(){
+  const wrap = $("chapters");
+  wrap.innerHTML = "";
+  for(let L = 1; L <= state.currentLevel; L++){
+    const lp = lpOf(L);
+    const done = lp.bossPassed;
+    const name = LEVEL_NAMES[L - 1] || "המשך מתמשך";
+    const pct = Math.min(100, Math.round(lp.c / 15 * 100));
+    const el = document.createElement("div");
+    el.className = "chapter" + (done ? " done" : "");
+    el.innerHTML = `<div class="num">${done ? "✓" : L}</div>
+      <div class="info"><h3>פרק ${L}: ${name}</h3>
+      <div class="bar" style="margin:6px 0"><i style="width:${done ? 100 : pct}%"></i></div>
+      <div class="muted">${done ? "הושלם" : lp.c + "/15 תשובות נכונות · דיוק אחרון " + Math.round(recentAcc(lp) * 100) + "%"}</div></div>`;
+    wrap.appendChild(el);
+  }
+  const next = state.currentLevel + 1;
+  const locked = document.createElement("div");
+  locked.className = "chapter locked";
+  locked.innerHTML = `<div class="num">🔒</div><div class="info"><h3>פרק ${next}: ${LEVEL_NAMES[next - 1] || "המשך מתמשך"}</h3>
+    <div class="muted">ייפתח לאחר ניצחון בבוס הפרק הנוכחי. הפרקים אינם מוגבלים: אחרי פרק 5 התוכן מתחדש עם תרגילים מגוונים ללא סוף.</div></div>`;
+  wrap.appendChild(locked);
+}
+
+let dictFilter = "all";
+function renderDict(){
+  const grid = $("wordgrid");
+  grid.innerHTML = "";
+  const items = WORDS.filter(w => {
+    if(dictFilter === "fav") return state.fav[w.en];
+    if(dictFilter === "hard") return state.hard[w.en];
+    if(dictFilter === "new") return !state.seen[w.en];
+    return true;
+  });
+  if(!items.length){
+    grid.innerHTML = '<p class="muted">אין מילים בקטגוריה הזו עדיין.</p>';
+    return;
+  }
+  items.forEach(w => {
+    const card = document.createElement("div");
+    card.className = "wordchip";
+    const seen = !!state.seen[w.en];
+    card.innerHTML = `<div><span class="en">${w.en}</span> ${state.fav[w.en] ? "⭐" : ""} ${state.hard[w.en] ? "🧩" : ""}</div>
+      <div class="he"></div>
+      <div class="tools">
+        <button class="btn small" data-act="reveal">הצג תרגום</button>
+        <button class="btn small" data-act="fav">מועדף</button>
+        <button class="btn small" data-act="hard">קשה</button>
+      </div>`;
+    card.querySelector('[data-act="reveal"]').onclick = () => {
+      card.querySelector(".he").textContent = w.he + " · " + w.ex.replace("___", w.en);
+    };
+    card.querySelector('[data-act="fav"]').onclick = () => { state.fav[w.en] = !state.fav[w.en]; save(); renderDict(); };
+    card.querySelector('[data-act="hard"]').onclick = () => { state.hard[w.en] = !state.hard[w.en]; save(); renderDict(); };
+    if(!seen) card.querySelector(".en").textContent = w.en + " (חדשה)";
+    grid.appendChild(card);
+  });
+}
+
+function renderStats(){
+  const total = state.answered;
+  let c = 0, a = 0;
+  Object.values(state.days).forEach(d => { a += d.a; c += d.c; });
+  $("stTotal").textContent = total;
+  $("stAcc").textContent = a ? Math.round(c / a * 100) + "%" : "—";
+  $("stBest").textContent = state.bestStreak;
+
+  const chart = $("chart");
+  chart.innerHTML = "";
+  const maxA = Math.max(5, ...Array.from({length:14}, (_, i) => {
+    const k = new Date(Date.now() - (13 - i) * 864e5).toLocaleDateString("en-CA");
+    return (state.days[k] || {a:0}).a;
+  }));
+  for(let i = 13; i >= 0; i--){
+    const d = new Date(Date.now() - i * 864e5);
+    const k = d.toLocaleDateString("en-CA");
+    const day = state.days[k] || {a:0, c:0};
+    const col = document.createElement("div");
+    col.className = "col";
+    col.innerHTML = `<div class="bar-a" style="height:${day.a / maxA * 100}%" title="${day.a} תשובות"><div class="bar-c" style="height:${day.a ? day.c / day.a * 100 : 0}%"></div></div>
+      <small>${d.getDate()}/${d.getMonth() + 1}</small>`;
+    chart.appendChild(col);
+  }
+
+  const lt = $("levelTable");
+  lt.innerHTML = "";
+  Object.keys(state.lp).map(Number).sort((x, y) => x - y).forEach(L => {
+    const lp = state.lp[L];
+    const acc = lp.a ? Math.round(lp.c / lp.a * 100) : 0;
+    lt.innerHTML += `<tr><td>פרק ${L}</td><td>${lp.a}</td><td>${acc}%</td></tr>`;
+  });
+  if(!lt.innerHTML) lt.innerHTML = '<tr><td colspan="3" class="muted">אין נתונים עדיין</td></tr>';
+
+  const st = $("strengths");
+  const cats = Object.entries(state.cats).filter(([, v]) => v.a >= 5)
+    .map(([k, v]) => ({k, acc: Math.round(v.c / v.a * 100), a: v.a}))
+    .sort((x, y) => y.acc - x.acc);
+  if(!cats.length){
+    st.innerHTML = '<p class="muted">צריך לפחות 5 תשובות בכל תחום כדי להציג נתונים.</p>';
+  } else {
+    const best = cats.slice(0, 2), worst = cats.slice(-2).reverse();
+    st.innerHTML = `<p><b>חוזק:</b> ${best.map(x => catName(x.k) + " (" + x.acc + "%)").join(", ")}</p>
+      <p><b>לשיפור:</b> ${worst.map(x => catName(x.k) + " (" + x.acc + "%)").join(", ")}</p>
+      <p class="muted">טעויות ממתינות לחזרה: ${Object.keys(state.mistakes).length}</p>`;
+  }
+}
+
+function renderAch(){
+  const list = $("achList");
+  list.innerHTML = "";
+  const got = ACH.filter(a => state.ach[a.id]).length;
+  $("achCount").textContent = got + " מתוך " + ACH.length + " הישגים נפתחו";
+  ACH.forEach(a => {
+    const on = !!state.ach[a.id];
+    const el = document.createElement("div");
+    el.className = "ach " + (on ? "got" : "locked");
+    el.innerHTML = `<div class="ic">${on ? a.ic : "🔒"}</div><div><b>${a.t}</b><div class="muted">${a.d}</div></div>`;
+    list.appendChild(el);
+  });
+}
+
+function renderSettings(){
+  $("setSound").checked = !!state.settings.sound;
+  $("setAnim").checked = !!state.settings.anim;
+  $("bankInfo").textContent = "בנק קבוע של " + QUESTION_BANK_SIZE + " שאלות: " + WORDS.length + " מילים × 3 סוגי תרגיל (תרגום לעברית, תרגום לאנגלית, השלמת משפט), ו-" + GRAMMAR.length + " שאלות דקדוק. בנוסף, תרגילי זמנים, רבים והשוואה נוצרים אקראית ולכן אין להם תקרה.";
+  document.body.classList.toggle("no-anim", !state.settings.anim);
+}
+
+/* ============================================================
+   NAV & EVENTS
+   ============================================================ */
+function show(id){
+  document.querySelectorAll(".screen").forEach(s => s.classList.toggle("active", s.id === id));
+  document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("on", b.dataset.go === id));
+  if(id === "home") renderHome();
+  if(id === "map") renderMap();
+  if(id === "dict") renderDict();
+  if(id === "stats") renderStats();
+  if(id === "ach") renderAch();
+  if(id === "settings") renderSettings();
+  if(id === "essay") renderEssay();
+  if(id === "bagrut") renderBagrut();
+  window.scrollTo(0, 0);
+}
+
+document.querySelectorAll("[data-go]").forEach(b => b.onclick = () => show(b.dataset.go));
+document.querySelectorAll("[data-start]").forEach(b => b.onclick = () => {
+  const [mode, n] = b.dataset.start.split(":");
+  startSession(mode, Number(n));
+});
+$("bossBtn").onclick = () => startSession("boss", 10);
+$("continueBtn").onclick = () => {
+  const m = state.lastMode === "test" ? "test" : "practice";
+  startSession(m, 10);
+};
+$("hintBtn").onclick = useHint;
+$("essayText").oninput = () => {
+  if(!essayCur) return;
+  const t = $("essayText").value;
+  state.essay.drafts[essayCur.id] = t;
+  $("essayCount").textContent = wc(t) + " מילים";
+  save();
+};
+$("essayBackTop").onclick = () => { courseCur = null; essayCur = null; renderEssay(); };
+$("essayCheck").onclick = checkEssay;
+$("bgSubmit").onclick = () => submitExam(false);
+$("essayBack").onclick = () => { essayCur = null; renderEssay(); };
+$("essayStart").onclick = () => {
+  $("essayWriteCard").classList.remove("hidden");
+  $("essayStart").classList.add("hidden");
+  $("essayText").focus();
+};
+$("nextBtn").onclick = () => nextQuestion();
+$("exitBtn").onclick = exitSession;
+document.querySelectorAll("#dictTabs button").forEach(b => b.onclick = () => {
+  dictFilter = b.dataset.f;
+  document.querySelectorAll("#dictTabs button").forEach(x => x.classList.toggle("on", x === b));
+  renderDict();
+});
+$("setSound").onchange = e => { state.settings.sound = e.target.checked; save(); };
+$("setAnim").onchange = e => { state.settings.anim = e.target.checked; save(); renderSettings(); };
+
+$("exportBtn").onclick = () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "english-master-backup-" + todayStr() + ".json";
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+$("importFile").onchange = e => {
+  const file = e.target.files[0];
+  if(!file) return;
+  if(file.size > 5000000){ toast("הקובץ גדול מדי"); e.target.value = ""; return; }
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const obj = JSON.parse(reader.result);
+      if(typeof obj.xp !== "number" || typeof obj.currentLevel !== "number" || obj.currentLevel < 1){
+        toast("קובץ הגיבוי אינו תקין");
+        return;
+      }
+      state = sanitizeState(obj);
+      save();
+      toast("הגיבוי יובא בהצלחה");
+      show("home");
+    }catch(err){
+      toast("לא ניתן לקרוא את הקובץ");
+    }
+  };
+  reader.readAsText(file);
+};
+$("resetBtn").onclick = () => {
+  if(!confirm("למחוק את כל ההתקדמות? הפעולה אינה הפיכה.")) return;
+  state = defaultState();
+  save();
+  show("home");
+  toast("ההתקדמות אופסה");
+};
+
+document.addEventListener("keydown", e => {
+  if(!$("session").classList.contains("active") || !cur) return;
+  if(!$("overlay").classList.contains("hidden")) return;
+  if(e.key >= "1" && e.key <= "4"){
+    const i = Number(e.key) - 1;
+    if(!cur.done && cur.q.options[i] !== undefined) answer(i);
+  }
+  if(e.key === "Enter" && cur.done && e.target.tagName !== "BUTTON"){ e.preventDefault(); nextQuestion(); }
+});
+
+// התחלה
+touchDay();
+save();
+renderSettings();
+show("home");
+</script>
 </body>
 </html>
